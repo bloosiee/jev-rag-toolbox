@@ -3,7 +3,7 @@ requires = ["setuptools>=64"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "jev-toolbox"
+name = "jev-rag-toolbox"
 version = "0.1.0"
 description = "Train and evaluate Jev decisions for evidence sufficiency and search necessity"
 requires-python = ">=3.9"

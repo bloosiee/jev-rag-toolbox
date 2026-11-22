@@ -1,4 +1,4 @@
-# Jev Toolbox
+# Jev-RAG Toolbox
 
 训练和评测面向具体决策的 Jev。v0.1 提供两个独立训练的决策头，配套同一套推理和评测命令。
 
