@@ -30,6 +30,10 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 
 `--method` 支持 `jev`、`qwen`、`rule`。Qwen 禁用 adapter，从相同输入的候选字母 logits 取最大值。固定规则始终继续检索或执行追问。评测先写 `predictions.json`，再读取标签并写 `metrics.json`。指标包括准确率、macro-F1、混淆矩阵，以及有概率输出时的充分性 AUROC。
 
+## 迭代 RAG
+
+用相同的全文检索、草稿和追问逻辑比较无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md)
+
 ## 训练与结果
 
 - [数据卡](docs/DATASETS.md)记录两套训练数据的来源、字段、标签及冻结划分。

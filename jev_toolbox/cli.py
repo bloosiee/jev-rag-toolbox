@@ -7,6 +7,7 @@ from .evaluation import evaluate
 from .model import DecisionModel
 from .protocol import SPECS, atomic, file_sha
 from .training import prepare, verify
+from .rag.commands import add_parser as add_rag_parser
 
 
 def read(path):
@@ -36,8 +37,11 @@ def main():
     train = commands.add_parser("prepare-train", help="Verify inputs and create a fresh run")
     for name in ("config", "output", "base", "initial", "mentat-src"):
         train.add_argument(f"--{name}", type=Path, required=True)
+    add_rag_parser(commands)
     args = parser.parse_args()
-    if args.command == "predict":
+    if args.command == "rag":
+        result = args.handler(args)
+    elif args.command == "predict":
         result = infer(args, [read(args.request)], args.task)[0]
     else:
         config = read(args.config)

@@ -7,3 +7,5 @@ runs/
 /data/*/val/
 /data/*/test/
 .DS_Store
+/data/hotpotqa/tasks.json
+/data/hotpotqa/gold.json
