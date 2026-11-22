@@ -1,4 +1,6 @@
-# HotpotQA 迭代检索
+# DRIFT-inspired BM25 RAG
+
+方法参考微软 GraphRAG 的 DRIFT Search。DRIFT 使用社区报告生成初始答案和追问，再沿知识图谱开展局部搜索。本实验借鉴多轮追问流程，在每道题自带的候选文档内做 BM25 检索，按候选队列顺序处理追问，并比较三种门控策略。 [Microsoft Research 介绍](https://www.microsoft.com/en-us/research/blog/introducing-drift-search-combining-global-and-local-search-methods-to-improve-quality-and-efficiency/) · [GraphRAG 官方文档](https://microsoft.github.io/graphrag/query/drift_search/)
 
 每道题先用 BM25 取前两篇文档，由 Qwen 写出初始草稿。每轮先判断草稿是否完整且有已见证据支持。若继续检索，Qwen 提出一到三个候选追问。必要性判断逐条决定是否执行，执行时检索三篇文档并用 Qwen 读出分支答案。已执行分支的文档和答案进入状态，随后 Qwen 重写草稿。停搜时返回当前草稿，最多运行三轮。
 
