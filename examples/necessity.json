@@ -1,0 +1,32 @@
+{
+  "id": "example:necessity",
+  "state": {
+    "original_question": "Who designed the Cedar Bridge?",
+    "retrieved_documents": [
+      {
+        "title": "Cedar Bridge",
+        "text": "The Cedar Bridge was designed by Ada Chen."
+      }
+    ],
+    "executed_followups": [],
+    "current_intermediate_answer": "Ada Chen",
+    "pending_questions": [],
+    "proposed_followup": "Who designed the Cedar Bridge?"
+  },
+  "kind": "necessity",
+  "question": "Should the agent execute this proposed follow-up question to improve its answer to the original user question? Judge the value of investigating missing facts using only evidence already obtained.",
+  "options": [
+    {
+      "value": "execute",
+      "description": "Investigate: this follow-up could establish facts needed for the original answer that the retrieved evidence does not yet establish."
+    },
+    {
+      "value": "skip_covered",
+      "description": "Skip: the retrieved evidence already establishes the facts this follow-up asks for."
+    },
+    {
+      "value": "skip_unhelpful",
+      "description": "Skip: answering this follow-up would not help resolve the original question."
+    }
+  ]
+}

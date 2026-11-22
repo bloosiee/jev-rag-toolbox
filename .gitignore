@@ -1,0 +1,9 @@
+__pycache__/
+*.egg-info/
+.venv/
+runs/
+*.safetensors
+/data/*/train.json
+/data/*/val/
+/data/*/test/
+.DS_Store

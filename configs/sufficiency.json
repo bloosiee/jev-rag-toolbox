@@ -1,0 +1,23 @@
+{
+  "task": "sufficiency",
+  "data": "../data/sufficiency",
+  "recipe": "../recipes/train_sufficiency.py",
+  "training": {
+    "seed": 42,
+    "epochs": 1,
+    "rank": 64,
+    "lora_alpha": 128,
+    "max_length": 16384,
+    "learning_rates": [
+      5e-06,
+      1e-05,
+      2e-05
+    ],
+    "effective_batches": [
+      16,
+      32,
+      64
+    ],
+    "selection_rule": "Validation AUROC descending, accuracy descending, effective batch ascending, learning rate ascending, config ID ascending."
+  }
+}

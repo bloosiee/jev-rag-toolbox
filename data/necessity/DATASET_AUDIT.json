@@ -1,0 +1,44 @@
+{
+  "PASS": true,
+  "task_kind": "necessity",
+  "training_is_independent": true,
+  "candidate_questions": 1000,
+  "selected_questions": 987,
+  "train_questions": 697,
+  "validation_questions": 140,
+  "test_questions": 150,
+  "total_train_examples": 1822,
+  "necessity_train_examples": 1822,
+  "validation_examples": 370,
+  "test_examples": 396,
+  "sufficiency_examples": 0,
+  "excluded_uncertain": 0,
+  "train_sha256": "0a752e0e0e0471af0b7a03e9eb5cb9402ce44023a36efaa6426e29106ade972e",
+  "split_manifest_sha256": "dbb45507a2977c3682b77eb8864d1d1b84b3453b333e1d03c72b60c210fd39f1",
+  "hard_targets_only": true,
+  "student_input_contains_gold_or_teacher_decomposition": false,
+  "training_uses_train_split_only": true,
+  "labels_are_teacher_judgments_not_native_Hotpot_gold": true,
+  "label_counts": {
+    "train": {
+      "skip_unhelpful": 1146,
+      "skip_covered": 426,
+      "execute": 250
+    },
+    "val": {
+      "skip_covered": 72,
+      "skip_unhelpful": 247,
+      "execute": 51
+    },
+    "test": {
+      "execute": 49,
+      "skip_unhelpful": 273,
+      "skip_covered": 74
+    }
+  },
+  "teacher_question_counts": {
+    "DeepSeek-V4.1-Flash": 240,
+    "GLM-5.3-Flash": 747
+  },
+  "time": 1794892531.1733158
+}

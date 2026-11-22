@@ -1,0 +1,24 @@
+{
+  "id": "example:sufficiency",
+  "state": {
+    "original_question": "Who designed the Cedar Bridge?",
+    "retrieved_documents": [
+      {
+        "title": "Cedar Bridge",
+        "text": "The Cedar Bridge was designed by Ada Chen."
+      }
+    ]
+  },
+  "kind": "sufficiency",
+  "question": "Do the retrieved documents contain enough evidence to answer the ORIGINAL user question completely? Judge the supplied evidence only, not prior model knowledge or the quality of a draft answer.",
+  "options": [
+    {
+      "value": "sufficient",
+      "description": "The supplied evidence is sufficient: stop further retrieval and generate the final answer from this evidence."
+    },
+    {
+      "value": "insufficient",
+      "description": "Essential evidence is missing: continue investigation before generating the final answer."
+    }
+  ]
+}

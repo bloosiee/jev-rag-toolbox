@@ -1,0 +1,11 @@
+{
+  "PASS": true,
+  "task_kind": "sufficiency",
+  "training_is_independent": true,
+  "sufficiency_examples": 2704,
+  "necessity_examples": 0,
+  "total_train_examples": 2704,
+  "source": "SufficiencyBench v1.1 official train",
+  "train_sha256": "64445b931940821f05c314a7e1a4e81e2b8e430a5cf5e37c23c2a2ee804609d0",
+  "time": 1794799913.076782
+}

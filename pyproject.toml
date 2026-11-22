@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-toolbox"
+version = "0.1.0"
+description = "Train and evaluate Jev decisions for evidence sufficiency and search necessity"
+requires-python = ">=3.9"
+
+[project.scripts]
+jev = "jev_toolbox.cli:main"
+
+[tool.setuptools]
+packages = ["jev_toolbox"]
