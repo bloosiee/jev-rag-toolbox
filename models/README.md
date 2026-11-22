@@ -15,8 +15,15 @@
 
 | 权重包 | 用途 | SHA-256 文件清单 |
 | --- | --- | --- |
-| [sufficiency.tar.gz](https://github.com/bloosiee/jev-rag-toolbox/releases/download/v0.1.0-models/sufficiency.tar.gz) | 原生证据充分性判断 | [清单](sufficiency.sha256.json) |
-| [necessity.tar.gz](https://github.com/bloosiee/jev-rag-toolbox/releases/download/v0.1.0-models/necessity.tar.gz) | 原生三分类追问必要性判断 | [清单](necessity.sha256.json) |
-| [joint.tar.gz](https://github.com/bloosiee/jev-rag-toolbox/releases/download/v0.1.0-models/joint.tar.gz) | 联合模型，迭代 RAG 的充分性与必要性门控 | [清单](joint.sha256.json) |
+| `sufficiency` | 原生证据充分性判断 | [清单](sufficiency.sha256.json) |
+| `necessity` | 原生三分类追问必要性判断 | [清单](necessity.sha256.json) |
+| `joint` | 联合模型，迭代 RAG 的充分性与必要性门控 | [清单](joint.sha256.json) |
+
+Release 提供分卷文件。下载脚本按顺序校验分卷并组装压缩包。 [Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/v0.1.0-models)
+
+```bash
+python scripts/download_weights.py joint
+tar -xzf checkpoints/joint.tar.gz -C checkpoints
+```
 
 每个压缩包包含对应的 LoRA、决策读出层、配置和许可。解压后，将权重目录传给 `--checkpoint`。基座从上游获取。 [Qwen3.5-4B 固定版本](https://huggingface.co/Qwen/Qwen3.5-4B/tree/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a) · [Mentat v0.3 初始化模型](https://huggingface.co/yunqu/mentat-sys1-v0.3)
