@@ -57,6 +57,8 @@ def unique_by_id(rows):
 
 
 def run(args):
+    from ..adapters import load_adapter
+    from .adapted_runtime import AdaptedRuntime
     from .runtime import Runtime
 
     config = read(args.config)
@@ -65,6 +67,15 @@ def run(args):
         raise ValueError(f"Unknown arm: {arm}")
     tasks = read(args.tasks)
     unique_by_id(tasks)
+    if args.adapter_config and not (args.generator_adapter or args.gate_adapter):
+        raise ValueError("--adapter-config requires a generator or gate adapter")
+    if arm == "fixed" and args.gate_adapter:
+        raise ValueError("The fixed policy has no gate to replace")
+    needs_native = not args.generator_adapter or (arm != "fixed" and not args.gate_adapter)
+    if needs_native and not (args.base and args.checkpoint):
+        raise ValueError("Native generation or gating requires --base and --checkpoint")
+    if args.manifest and (args.generator_adapter or args.gate_adapter):
+        raise ValueError("The frozen manifest is for the original model. Omit it for a different backend.")
     if args.manifest:
         manifest = read(args.manifest)
         if [{"id": row["id"], "request_sha256": digest(row)} for row in tasks] != manifest["tasks"]:
@@ -75,9 +86,14 @@ def run(args):
             if file_sha(directory / filename) != expected:
                 raise ValueError(f"Model input hash mismatch: {key}")
     args.output.mkdir(parents=True, exist_ok=False)
-    config.update(answer_model=str(args.base.resolve()), jev_model=str(args.checkpoint.resolve()))
+    if needs_native:
+        config.update(answer_model=str(args.base.resolve()), jev_model=str(args.checkpoint.resolve()))
+    config.update(generator_adapter=args.generator_adapter, gate_adapter=args.gate_adapter)
     atomic(args.output / "run.json", {"config": config, "tasks_sha256": file_sha(args.tasks)})
-    runtime = Runtime(config, args.output)
+    native = Runtime(config, args.output) if needs_native else None
+    generator = load_adapter(args.generator_adapter, args.adapter_config) if args.generator_adapter else None
+    gate = load_adapter(args.gate_adapter, args.adapter_config) if args.gate_adapter else None
+    runtime = AdaptedRuntime(config, native, generator, gate)
     predictions = []
     for index, task in enumerate(tasks):
         directory = args.output / "trace" / f"{index:04d}"
@@ -99,8 +115,9 @@ def score_predictions(rows, gold):
             f1 += compute_f1(gold[uid], row["answer"])
     n = len(predictions)
     keys = ("qwen_calls", "jev_calls", "input_tokens", "output_tokens",
-            "end_to_end_seconds", "qwen_seconds", "jev_seconds")
-    totals = {key: sum(row[key] for row in rows) for key in keys if all(key in row for row in rows)}
+            "end_to_end_seconds", "qwen_seconds", "jev_seconds", "adapter_calls", "adapter_seconds")
+    totals = {key: (sum(row[key] for row in rows) if all(row[key] is not None for row in rows) else None)
+              for key in keys if all(key in row for row in rows)}
     return {"questions": n, "exact": exact, "EM": exact / n, "F1": f1 / n, **totals}
 
 
@@ -115,7 +132,7 @@ def add_parser(commands):
     stages = group.add_subparsers(dest="rag_command", required=True)
     specs = (
         ("prepare", prepare, ("source", "manifest", "output"), ()),
-        ("run", run, ("config", "tasks", "base", "checkpoint", "output"), ("manifest",)),
+        ("run", run, ("config", "tasks", "output"), ("manifest", "base", "checkpoint", "adapter-config")),
         ("score", score, ("predictions", "gold", "output"), ()),
     )
     for name, handler, required, optional in specs:
@@ -124,4 +141,7 @@ def add_parser(commands):
             parser.add_argument(f"--{arg}", type=Path, required=True)
         for arg in optional:
             parser.add_argument(f"--{arg}", type=Path)
+        if name == "run":
+            for role in ("generator", "gate"):
+                parser.add_argument(f"--{role}-adapter", help="Local Python module:factory")
         parser.set_defaults(handler=handler)

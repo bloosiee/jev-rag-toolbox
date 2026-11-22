@@ -34,6 +34,10 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 
 用相同的全文检索、草稿和追问逻辑比较无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md)
 
+## 自定义输入
+
+用 `jev convert` 导入决策日志或 RAG 测试集。用 Python 适配器接入自己的生成模型或门控模型。 [自定义输入与适配器示例](docs/CUSTOM_INPUTS.md)
+
 ## 训练与结果
 
 - [数据卡](docs/DATASETS.md)记录两套训练数据的来源、字段、标签及冻结划分。

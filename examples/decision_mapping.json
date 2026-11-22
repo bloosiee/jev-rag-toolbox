@@ -1,0 +1,6 @@
+{
+  "id": "key",
+  "original_question": "payload.question",
+  "retrieved_documents": "payload.evidence",
+  "label": "target"
+}

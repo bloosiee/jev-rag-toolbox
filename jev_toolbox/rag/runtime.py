@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import time
 
-from .protocol import atomic, digest, answer_prompt, decision_prompt, spec
+from .protocol import atomic, digest, answer_prompt, decision_options, decision_prompt
 
 
 class Runtime:
@@ -70,11 +70,7 @@ class Runtime:
         torch = self.torch
         request = {'state': evidence, 'kind': kind, 'arm': arm}
         start = time.perf_counter()
-        options = spec(kind)[1]
-        if arm == 'qwen' and kind == 'necessity':
-            options = [options[0],
-                ('skip_covered', 'Skip: the retrieved evidence already establishes the facts this follow-up asks for.'),
-                ('skip_unhelpful', 'Skip: answering this follow-up would not help resolve the original question.')]
+        options = decision_options(kind, arm)
         prompt = decision_prompt(evidence, kind, options)
         k=len(options)
         labels=[chr(65+i) for i in range(k+1)]

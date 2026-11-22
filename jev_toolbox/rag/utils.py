@@ -40,7 +40,7 @@ def rank(task):
     words = [tokens(d['title'] + ' ' + ''.join(d['sentences'])) for d in docs]
     counts = list(map(Counter, words))
     df = Counter(t for w in words for t in set(w))
-    avg = sum(map(len, words)) / len(words)
+    avg = sum(map(len, words)) / len(words) or 1
     query = tokens(task['question'])
     scores = []
     for w, c in zip(words, counts):

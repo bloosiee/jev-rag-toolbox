@@ -80,14 +80,21 @@ def run_task(runtime, task, arm, directory, config, initial):
         steps.append({"round": round_number, "frontier": frontier, "branches": branches, "draft": draft})
 
     own_seconds = perf_counter() - started
-    jev_events = [e for e in events if e.get("arm") == "jev"]
-    qwen_events = [e for e in events if e.get("arm") != "jev"]
+    adapter_events = [e for e in events if e.get("model_backend") == "adapter"]
+    native_events = [e for e in events if e.get("model_backend") != "adapter"]
+    jev_events = [e for e in native_events if e.get("arm") == "jev"]
+    qwen_events = [e for e in native_events if e.get("arm") != "jev"]
+    token_totals = {}
+    for key in ("input_tokens", "output_tokens"):
+        values = [e[key] for e in events]
+        token_totals[key] = None if None in values else sum(values)
     result = {
         "id": task["id"], "task_sha256": digest(task), "arm": arm, "answer": draft,
         "stop_reason": stop, "rounds": steps, "retrieved_indices": indices,
         "qwen_calls": len(qwen_events), "jev_calls": len(jev_events),
-        "input_tokens": sum(e["input_tokens"] for e in events),
-        "output_tokens": sum(e["output_tokens"] for e in events),
+        "adapter_calls": len(adapter_events),
+        "adapter_seconds": sum(e["wall_seconds"] for e in adapter_events),
+        **token_totals,
         "qwen_seconds": sum(e["wall_seconds"] for e in qwen_events),
         "jev_seconds": sum(e["wall_seconds"] for e in jev_events),
         "end_to_end_seconds": own_seconds + events[0]["wall_seconds"],

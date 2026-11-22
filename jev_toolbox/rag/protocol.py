@@ -22,6 +22,15 @@ NEXT_SCHEMA={'type':'object','properties':{'questions':{'type':'array','minItems
 def spec(kind):return SPECS[kind]
 
 
+def decision_options(kind, arm):
+    options = spec(kind)[1]
+    if arm == "qwen" and kind == "necessity":
+        return [options[0],
+                ("skip_covered", "Skip: the retrieved evidence already establishes the facts this follow-up asks for."),
+                ("skip_unhelpful", "Skip: answering this follow-up would not help resolve the original question.")]
+    return options
+
+
 def normalize_question(q):return re.sub(r'\s+',' ',q.strip().casefold()).rstrip(' ?')
 
 
