@@ -24,7 +24,7 @@ def download(model, directory):
     try:
         with output:
             for part in bundle["parts"]:
-                url = f"{PROJECT}/releases/download/{manifest['tag']}/{part['name']}"
+                url = f"{PROJECT}/releases/download/{bundle.get('tag', manifest['tag'])}/{part['name']}"
                 with urlopen(url, timeout=90) as response:
                     data = response.read(part["size"] + 1)
                 if len(data) != part["size"] or hashlib.sha256(data).hexdigest() != part["sha256"]:

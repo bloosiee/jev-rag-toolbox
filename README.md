@@ -2,11 +2,11 @@
 
 训练和评测迭代 RAG 的 Jev 门控。联合模型使用同一套适配器和读出层，支持充分性与必要性判断。
 
-| 模型版本 | 训练方式 | 发布状态 |
+| 模型版本 | 训练方式 | 权重下载 |
 | --- | --- | --- |
 | v1 | 原始充分性数据与教师标注必要性数据联合训练 | [下载权重](models/README.md#下载-v1-权重) |
-| v2 | 真实迭代轨迹的草稿充分性与原必要性数据联合训练 | [HotpotQA 主实验](docs/HOTPOTQA400_V2.md) |
-| v3 | 按 Wang 等的条件交互框架，用同状态分叉的实际结果监督门控 | [训练方案](docs/TRAINING.md#v3-分叉结果监督) · 计划中 |
+| v2 | 真实迭代轨迹的草稿充分性与原必要性数据联合训练 | [下载权重](models/README.md#下载-v2-权重) |
+| v3 | 按 Wang 等的条件交互框架，用同状态分叉的实际结果监督门控 | 待发布 |
 
 | 决策 | 输入 | 输出 |
 | --- | --- | --- |
@@ -38,7 +38,7 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 
 ## DRIFT-inspired BM25 RAG
 
-借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md) · [门控消融](docs/HOTPOTQA400_GATE_ABLATION.md) · [查询逐步轨迹](docs/GATE_TRACES.md)
+借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [复现流程](docs/ITERATIVE_RAG.md) · [实验结果](results/README.md) · [查询逐步轨迹](docs/GATE_TRACES.md)
 
 ## 一键对比与诊断
 
@@ -51,8 +51,9 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 ## 训练与结果
 
 - [数据卡](docs/DATASETS.md)记录训练数据的来源、字段、标签及冻结划分。
-- [训练复现](docs/TRAINING.md)说明联合训练网格与任务级训练接口。
-- [模型卡](models/README.md)记录已有模型配置、评测成绩和权重校验方式。
+- [训练复现](docs/TRAINING.md)说明联合训练网格、[v3 方案](docs/TRAINING.md#v3-分叉结果监督)与任务级训练接口。
+- [模型卡](models/README.md)记录模型配置和权重校验方式。
+- [实验结果](results/README.md)收录对照表、消融与轨迹。
 - [仓库约定](docs/CONVENTIONS.md)记录目录设计、实验记录规范和参考仓库。
 
 复现需要原始 Qwen3.5-4B、Mentat v0.3 权重与对应源码。将训练和评测所需的 JSON 放到对应的 `data/<task>/` 目录。用 `data/*/FILES_SHA256.json` 核对版本。模型卡列出了权重校验值。

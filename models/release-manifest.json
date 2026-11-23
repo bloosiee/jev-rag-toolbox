@@ -146,6 +146,153 @@
           "sha256": "7c3c3bc34b6ea58974497b25e785da7f851d865e0c9c01546aaef0b7c60f6d72"
         }
       ]
+    },
+    "v2": {
+      "tag": "joint-model-v2",
+      "archive": "joint-v2.tar.gz",
+      "sha256": "cd2f2acd691d76fe7d0196bfbf5cdf101379eda297b16039a86c58777ca9fbf2",
+      "parts": [
+        {
+          "name": "joint-v2.tar.gz.part000",
+          "size": 16777216,
+          "sha256": "e7128c9f0bc37cf0ba2f46dbb2cce515f38982f99662b17f0650fcbb81645405"
+        },
+        {
+          "name": "joint-v2.tar.gz.part001",
+          "size": 16777216,
+          "sha256": "0c9e2e4bb5e96e74face55bfb76bcf6da3d33cb542e66f3d56662e00457fae59"
+        },
+        {
+          "name": "joint-v2.tar.gz.part002",
+          "size": 16777216,
+          "sha256": "04ba12ddaede9a78f812db127501d26e79926ee7e26cea9b7ca05ffd03b38f36"
+        },
+        {
+          "name": "joint-v2.tar.gz.part003",
+          "size": 16777216,
+          "sha256": "8a27733ac1fd74343600274f94c64c07bb9648f0452979b58f47d6f22a2aa602"
+        },
+        {
+          "name": "joint-v2.tar.gz.part004",
+          "size": 16777216,
+          "sha256": "8e8fbe0bc50ab27aa789f843fabb3cec434c2a432bf86b3d49c78698a0d1c955"
+        },
+        {
+          "name": "joint-v2.tar.gz.part005",
+          "size": 16777216,
+          "sha256": "d089f6de1283144e28824d5cadc621d8481c92a8d90ace6be04292cedb37930c"
+        },
+        {
+          "name": "joint-v2.tar.gz.part006",
+          "size": 16777216,
+          "sha256": "68cb4f002ac6445133330dec22fa188ee65104d27b1759d866144c3bc2d7df8c"
+        },
+        {
+          "name": "joint-v2.tar.gz.part007",
+          "size": 16777216,
+          "sha256": "fbfb5f76c945a7268fb7e0599db941d473a65aed417f59ea440019cd3a662f01"
+        },
+        {
+          "name": "joint-v2.tar.gz.part008",
+          "size": 16777216,
+          "sha256": "633c1a7c89ef7f980888fc029b2d8532456524860ce88cfc773843f80768fcda"
+        },
+        {
+          "name": "joint-v2.tar.gz.part009",
+          "size": 16777216,
+          "sha256": "fd674605d4da9c11449b196d90077a6b7d62d5ff9d4e9bf57c8525e513a7f541"
+        },
+        {
+          "name": "joint-v2.tar.gz.part010",
+          "size": 16777216,
+          "sha256": "ba210e69a4e68322bd3978f56db16025e3237742e6b519f0afe31ccbf3ec734d"
+        },
+        {
+          "name": "joint-v2.tar.gz.part011",
+          "size": 16777216,
+          "sha256": "68aa8ef1021e95b1a26358e3a808b151cda6e6ab73f2c1526bb7ab8ac3bdf32c"
+        },
+        {
+          "name": "joint-v2.tar.gz.part012",
+          "size": 16777216,
+          "sha256": "727be03d0ba7c98aa1d30b13e378848541bb7902eeb133f8ff1599ea01544bd9"
+        },
+        {
+          "name": "joint-v2.tar.gz.part013",
+          "size": 16777216,
+          "sha256": "d8e0f76529ce798c4b2bef5403bb4ece93e63b95e94c3e31b0ec483d61cc185e"
+        },
+        {
+          "name": "joint-v2.tar.gz.part014",
+          "size": 16777216,
+          "sha256": "81b82d68ea5241b7b98a39758618042a90dfa4fa00f10e1e42405da739e100f5"
+        },
+        {
+          "name": "joint-v2.tar.gz.part015",
+          "size": 16777216,
+          "sha256": "1a18a9d89a29fd87b225b7a888a997c01d262e3e6b80b421b516c9747404281b"
+        },
+        {
+          "name": "joint-v2.tar.gz.part016",
+          "size": 16777216,
+          "sha256": "f3725e4cdd628e348632a4e2f82f71e6b68c6d82b8118550848d53afa1ad210a"
+        },
+        {
+          "name": "joint-v2.tar.gz.part017",
+          "size": 16777216,
+          "sha256": "2fc333f5064e68912be0fe360c435a89eb43b855cb36da24cbde42bc9b51a06d"
+        },
+        {
+          "name": "joint-v2.tar.gz.part018",
+          "size": 16777216,
+          "sha256": "616a3b9a280b62c92a572ebcd87aee5fa84ea161420576629d36b8ee9fba21a0"
+        },
+        {
+          "name": "joint-v2.tar.gz.part019",
+          "size": 16777216,
+          "sha256": "e28d83c6d4b755d3f24ddc770c7ec09ddbcc9129f05d9e3d99857ecdb1ff7656"
+        },
+        {
+          "name": "joint-v2.tar.gz.part020",
+          "size": 16777216,
+          "sha256": "de937cf06814e5631a0bd1196148fdb39649d02340f12a978358325e94af4794"
+        },
+        {
+          "name": "joint-v2.tar.gz.part021",
+          "size": 16777216,
+          "sha256": "a66713eb83b91a712e515693b5d80729aa21dcdfbb92217a869610c6adf95428"
+        },
+        {
+          "name": "joint-v2.tar.gz.part022",
+          "size": 16777216,
+          "sha256": "fb99c214f1d9e61139d3831af5cdb5c4712e1a8d166fbda432a8af3e1a024fdb"
+        },
+        {
+          "name": "joint-v2.tar.gz.part023",
+          "size": 16777216,
+          "sha256": "08e760f1dd6af71355a07021bd67bda6393a16ccd42baeb7b90ea32c8b845652"
+        },
+        {
+          "name": "joint-v2.tar.gz.part024",
+          "size": 16777216,
+          "sha256": "f214e0f51493619b7302b613954dafeac3ce68af84947d2de317aabf87e21870"
+        },
+        {
+          "name": "joint-v2.tar.gz.part025",
+          "size": 16777216,
+          "sha256": "79aa8c47cbf13bf303ddb309cd05ce453c42e0881fa7211564c19a200ea87d52"
+        },
+        {
+          "name": "joint-v2.tar.gz.part026",
+          "size": 16777216,
+          "sha256": "26f603aedbf0b70c191b367ee16c170017a18f1e2e151b95a71b2a7aadbfb9e8"
+        },
+        {
+          "name": "joint-v2.tar.gz.part027",
+          "size": 728814,
+          "sha256": "5b88194b1107751bfd7d8035d9c2e819562d3088e62dd7dd18030986bd57a083"
+        }
+      ]
     }
   }
 }
