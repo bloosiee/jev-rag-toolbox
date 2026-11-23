@@ -1,19 +1,21 @@
 # 联合模型卡
 
-| 版本 | 充分性训练 | 必要性训练 | 状态 |
-| --- | --- | --- | --- |
-| v1 | SufficiencyBench v1.1，2,704 个状态 | RAG-Necessity-987，1,822 个教师标注状态 | [下载权重](#下载-v1-权重)，batch 16，学习率 2e-5 |
-| v2 | 真实轨迹的草稿充分性，927 个状态 | 同 v1 | [下载权重](#下载-v2-权重)，batch 16，学习率 2e-5 |
-| v3 | 以 v2 为对照 | 按 Wang 等的条件交互框架，用执行和跳过的终局结果生成动作标签 | [训练方案](../docs/TRAINING.md#v3-分叉结果监督) · 计划中 |
+工具箱代码发布用 `toolbox-vX.Y.Z`。联合权重和今后的权重 Release 用 `jev-joint-vN`。早期发布的下载地址继续可用。
 
-v2 在固定划分上按充分性验证准确率 60%、必要性验证准确率 40% 选择联合模型。 [实验结果与轨迹](../results/README.md)
+| 权重标识 | 充分性训练 | 必要性训练 | 状态 |
+| --- | --- | --- | --- |
+| `jev-joint-v1` | SufficiencyBench v1.1，2,704 个状态 | RAG-Necessity-987，1,822 个教师标注状态 | [下载权重](#下载-v1-权重)，batch 16，学习率 2e-5 |
+| `jev-joint-v2` | 真实轨迹的草稿充分性，927 个状态 | 同 v1 | [下载权重](#下载-v2-权重)，batch 16，学习率 2e-5 |
+| `jev-joint-v3` | 以 v2 为对照 | 按 Wang 等的条件交互框架，用执行和跳过的终局结果生成动作标签 | [训练方案](../docs/TRAINING.md#v3-分叉结果监督) · 计划中 |
+
+`jev-joint-v2` 在固定划分上按充分性验证准确率 60%、必要性验证准确率 40% 选择联合模型。 [实验结果与轨迹](../results/README.md)
 
 ## 下载 v1 权重
 
-[GitHub Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/v0.1.0-models) 提供 v1 联合模型的分卷。脚本依次核验分卷和压缩包的 SHA-256。
+`jev-joint-v1` 的权重分卷位于 [GitHub Release `jev-joint-v1`](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/jev-joint-v1)。脚本依次核验分卷和压缩包的 SHA-256。
 
 ```bash
-python scripts/download_weights.py v1
+python scripts/download_weights.py jev-joint-v1
 tar -xzf checkpoints/joint.tar.gz -C checkpoints
 ```
 
@@ -22,10 +24,10 @@ tar -xzf checkpoints/joint.tar.gz -C checkpoints
 
 ## 下载 v2 权重
 
-[GitHub Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/joint-model-v2) 提供 v2 联合模型的分卷。脚本依次核验分卷和压缩包的 SHA-256。
+`jev-joint-v2` 的权重分卷位于 [GitHub Release `joint-model-v2`](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/joint-model-v2)。脚本依次核验分卷和压缩包的 SHA-256。
 
 ```bash
-python scripts/download_weights.py v2
+python scripts/download_weights.py jev-joint-v2
 tar -xzf checkpoints/joint-v2.tar.gz -C checkpoints
 ```
 
