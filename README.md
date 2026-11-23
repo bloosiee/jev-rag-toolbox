@@ -64,7 +64,17 @@ python examples/replay_demo.py
 
 ### Qwen3.5-9B
 
-9B 的消融和 95/95 对照使用 9B 自己的同题基线，单独成图。当前尚无已核验的 9B 结果。
+**HotpotQA 400 题消融。** Jev v1、v2 各与同题的 9B 无门控和 Qwen 门控对照。
+
+![HotpotQA 400：Qwen 9B 与 Jev v1 各消融设置和基线](results/figures/hotpotqa-qwen9b-v1-ablation.png)
+
+![HotpotQA 400：Qwen 9B 与 Jev v2 各消融设置和基线](results/figures/hotpotqa-qwen9b-v2-ablation.png)
+
+**95/95 同题对照。** HotpotQA 和 2WikiMultiHopQA 各 400 题，权重为 Jev v1 和 v2。触及输出上限的结果按失败计分，保留在 400 题分母和成本中。
+
+![HotpotQA 400：Qwen 9B 基线及 Jev v1、v2 的 95/95 对照](results/figures/hotpotqa-qwen9b-9595.png)
+
+![2WikiMultiHopQA 400：Qwen 9B 基线及 Jev v1、v2 的 95/95 对照](results/figures/2wiki-qwen9b-9595.png)
 
 ## 快速试跑
 
