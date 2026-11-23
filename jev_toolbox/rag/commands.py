@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 from .controller import initial_answer, run_task
+from .trace import trace
 from .hotpot_answer_scoring import compute_exact, compute_f1
 from .utils import atomic, digest
 from ..protocol import file_sha
@@ -145,3 +146,9 @@ def add_parser(commands):
             for role in ("generator", "gate"):
                 parser.add_argument(f"--{role}-adapter", help="Local Python module:factory")
         parser.set_defaults(handler=handler)
+    lookup = stages.add_parser("trace", help="Inspect a question's recorded branches and steps")
+    lookup.add_argument("--input", type=Path, required=True)
+    lookup.add_argument("--id")
+    lookup.add_argument("--arm")
+    lookup.add_argument("--step", type=int)
+    lookup.set_defaults(handler=trace)

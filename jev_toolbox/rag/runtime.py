@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 import time
 
-from .protocol import atomic, digest, answer_prompt, decision_options, decision_prompt
+from .protocol import atomic, digest, answer_prompt, decision_input, decision_prompt, gate_threshold
 
 
 class Runtime:
@@ -68,10 +68,10 @@ class Runtime:
 
     def decision(self, evidence, arm, record, kind):
         torch = self.torch
-        request = {'state': evidence, 'kind': kind, 'arm': arm}
         start = time.perf_counter()
-        options = decision_options(kind, arm)
-        prompt = decision_prompt(evidence, kind, options)
+        evidence, question, options = decision_input(self.config, evidence, kind, arm)
+        request = {'state': evidence, 'kind': kind, 'arm': arm}
+        prompt = decision_prompt(evidence, kind, options, question)
         k=len(options)
         labels=[chr(65+i) for i in range(k+1)]
         rendered, raw_inputs, token_ids = self.engine._prepare([], prompt, labels)
@@ -132,7 +132,7 @@ class Runtime:
         }
         if arm == 'jev':
             from .confidence_policy import route
-            threshold = self.config['confidence_threshold']
+            threshold = gate_threshold(self.config, kind)
             low_policy = self.config['low_confidence_policy']
             routed = route(kind, p, [x[0] for x in options], threshold, low_policy)
             if routed['choice'] is None:

@@ -1,0 +1,145 @@
+{
+  "summary": {
+    "95_80": {
+      "correct": 206,
+      "n": 400,
+      "F1": 0.6383318666627491,
+      "valid": 400,
+      "stop_reasons": {
+        "no_pending_questions": 183,
+        "round_budget": 137,
+        "sufficient": 80
+      },
+      "qwen_calls": 2292,
+      "jev_calls": 1709,
+      "input_tokens": 2290858,
+      "output_tokens": 52053,
+      "qwen_seconds": 3085.132504997542,
+      "jev_seconds": 362.54114313446917,
+      "end_to_end_seconds": 3591.9779720667284
+    },
+    "80_80": {
+      "correct": 202,
+      "n": 400,
+      "F1": 0.628269947158105,
+      "valid": 400,
+      "stop_reasons": {
+        "sufficient": 251,
+        "round_budget": 65,
+        "no_pending_questions": 84
+      },
+      "qwen_calls": 1594,
+      "jev_calls": 1199,
+      "input_tokens": 1581653,
+      "output_tokens": 34960,
+      "qwen_seconds": 1982.296099780593,
+      "jev_seconds": 252.67879122612067,
+      "end_to_end_seconds": 2332.7800430483185
+    },
+    "compact_80_80": {
+      "n": 400,
+      "correct": 206,
+      "valid": 400,
+      "F1": 0.638269947158105,
+      "stop_reasons": {
+        "no_pending_questions": 217,
+        "sufficient": 37,
+        "round_budget": 146
+      },
+      "qwen_calls": 2523,
+      "jev_calls": 1894,
+      "input_tokens": 2139204,
+      "output_tokens": 57476,
+      "qwen_seconds": 3459.840777392965,
+      "jev_seconds": 302.38288488495164,
+      "end_to_end_seconds": 3927.546929273987
+    }
+  },
+  "references": {
+    "fixed": {
+      "EM_correct": 211,
+      "F1_sum": 265.8460519872285,
+      "input_tokens": 2400254,
+      "output_tokens": 104250,
+      "LLM_calls": 3706,
+      "questions": 400,
+      "LLM_seconds": 5571.523940476123,
+      "e2e_n": 400,
+      "e2e_seconds": 5847.342673063278
+    },
+    "qwen": {
+      "EM_correct": 149,
+      "F1_sum": 190.9636121188753,
+      "input_tokens": 1065085,
+      "output_tokens": 23849,
+      "LLM_calls": 2348,
+      "questions": 400,
+      "LLM_seconds": 1602.805575495353,
+      "e2e_n": 400,
+      "e2e_seconds": 1269.149274110794
+    },
+    "jev95": {
+      "EM_correct": 209,
+      "F1_sum": 262.06322370440023,
+      "input_tokens": 2758917,
+      "output_tokens": 64446,
+      "LLM_calls": 2602,
+      "Jev_calls": 1818,
+      "questions": 400,
+      "LLM_seconds": 3608.5066680398304,
+      "Jev_seconds": 404.73691933369264,
+      "e2e_seconds": 4128.506002187729,
+      "e2e_n": 400
+    }
+  },
+  "paired_vs_references": {
+    "95_80": {
+      "fixed": {
+        "improved": 12,
+        "regressed": 17
+      },
+      "qwen": {
+        "improved": 62,
+        "regressed": 5
+      },
+      "jev95": {
+        "improved": 7,
+        "regressed": 10
+      }
+    },
+    "80_80": {
+      "fixed": {
+        "improved": 12,
+        "regressed": 21
+      },
+      "qwen": {
+        "improved": 59,
+        "regressed": 6
+      },
+      "jev95": {
+        "improved": 7,
+        "regressed": 14
+      }
+    }
+  },
+  "paired_80_80_vs_95_80": {
+    "improved": 0,
+    "regressed": 4,
+    "same_correctness": 396
+  },
+  "paired_compact_vs_full_80_80": {
+    "improved": 4,
+    "regressed": 0
+  },
+  "sha256": {
+    "full_source_manifest": "d70e125c74f403f1adda6a15fc63d907da88c9957decabc27e82d4e907e57b9a",
+    "compact_source_manifest": "49b7c82920e159f0ff063cd7eac01e8ba13100c91d4eb58c82338280f522a82e",
+    "trace": "d6135aafee00da385a1fbbc944f727eced223531648fa0453554abf455f9c3bf",
+    "data_audit": "ace484b3864cdb6a346601d2bd51540d7e3a930de8647745db5f1586640780f4"
+  },
+  "configuration_files": {
+    "95_80": "configs/hotpotqa_jev_95_80.json",
+    "80_80": "configs/hotpotqa_jev_80_80.json",
+    "compact_80_80": "configs/hotpotqa_jev_80_80_compact.json"
+  }
+}

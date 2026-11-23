@@ -1,0 +1,21 @@
+{
+  "arm": "jev",
+  "max_rounds": 3,
+  "initial_documents": 2,
+  "max_selected_questions_per_round": 3,
+  "documents_per_branch": 3,
+  "max_next_tokens": 384,
+  "max_branch_tokens": 160,
+  "max_answer_tokens": 64,
+  "confidence_threshold": 0.95,
+  "low_confidence_policy": "conservative_continue",
+  "temperatures": {
+    "sufficiency": 1.040427813872421,
+    "necessity": 0.9521467171909944
+  },
+  "calibration_sha256": "4d885b3bbbc5285925f299be4a1cc2477d94b20f1038d2d405101e2addc1f62e",
+  "gate_thresholds": {
+    "sufficiency": 0.95,
+    "necessity": 0.8
+  }
+}

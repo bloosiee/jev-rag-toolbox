@@ -3,7 +3,7 @@ from collections.abc import Mapping
 from time import perf_counter
 
 from .confidence_policy import route
-from .protocol import answer_prompt, decision_options, spec
+from .protocol import answer_prompt, decision_input, gate_threshold
 from .utils import atomic
 from ..adapters import token_usage, validate_choice
 
@@ -46,8 +46,8 @@ class AdaptedRuntime:
     def decision(self, state, arm, record, kind):
         if self.gate is None:
             return self.native.decision(state, arm, record, kind)
-        options = decision_options(kind, arm)
-        request = {"kind": kind, "state": state, "question": spec(kind)[0],
+        state, question, options = decision_input(self.config, state, kind, arm)
+        request = {"kind": kind, "state": state, "question": question,
                    "options": [dict(value=value, description=desc) for value, desc in options]}
         started = perf_counter()
         result = self.gate.predict(kind, request)
@@ -59,8 +59,10 @@ class AdaptedRuntime:
         if arm == "jev":
             if event["probabilities"] is None:
                 raise ValueError("The Jev routing policy requires gate probabilities")
+            threshold = gate_threshold(self.config, kind)
             event.update(route(kind, [event["probabilities"][key] for key in values], values,
-                               self.config["confidence_threshold"], self.config["low_confidence_policy"]))
+                               threshold, self.config["low_confidence_policy"]))
+            event["confidence_threshold"] = threshold
             if event["choice"] is None:
                 raise ValueError("The adapter runtime requires an explicit routing action")
         atomic(record, event)

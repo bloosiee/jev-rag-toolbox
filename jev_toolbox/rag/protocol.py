@@ -15,6 +15,19 @@ SPECS={
   [('sufficient','End exploration and return the current intermediate answer: the original question is fully addressed and supported by the retrieved documents.'),
    ('continue','More investigation is needed: necessary facts are missing, or the intermediate answer is unsupported or incomplete.')])}
 
+COMPACT_STATE_KEYS = ("original_question", "executed_followups", "current_intermediate_answer")
+COMPACT_SUFFICIENCY = (
+    'Is the CURRENT DRAFT a sufficient answer to the ORIGINAL question, given the information found so far? '
+    'Use the executed follow-up questions and their answers to tell what was actually found. '
+    'A follow-up question by itself or a result saying insufficient evidence establishes no missing fact. '
+    'Evaluate the draft itself. The draft must directly and completely answer what was asked and be supported by the information found. '
+    'If the draft answers a different question, or is incomplete or unsupported, select continue even if the information found is enough to write a correct answer.',
+    [
+        ('sufficient', 'End exploration and return the current draft: it fully answers the original question and is consistent with the information found.'),
+        ('continue', 'More investigation is needed: a requested fact is missing, the draft is incomplete, or it conflicts with information found.'),
+    ],
+)
+
 NEXT_SCHEMA={'type':'object','properties':{'questions':{'type':'array','minItems':1,'maxItems':3,
  'items':{'type':'string','minLength':1,'maxLength':500}}},'required':['questions'],'additionalProperties':False}
 
@@ -29,6 +42,18 @@ def decision_options(kind, arm):
                 ("skip_covered", "Skip: the retrieved evidence already establishes the facts this follow-up asks for."),
                 ("skip_unhelpful", "Skip: answering this follow-up would not help resolve the original question.")]
     return options
+
+
+def decision_input(config, state, kind, arm):
+    if kind == "sufficiency" and config.get("sufficiency_mode") == "compact_question_history_draft":
+        state = {key: state[key] for key in COMPACT_STATE_KEYS}
+        question, options = COMPACT_SUFFICIENCY
+        return state, question, options
+    return state, spec(kind)[0], decision_options(kind, arm)
+
+
+def gate_threshold(config, kind):
+    return config.get("gate_thresholds", {}).get(kind, config["confidence_threshold"])
 
 
 def normalize_question(q):return re.sub(r'\s+',' ',q.strip().casefold()).rstrip(' ?')
@@ -51,11 +76,12 @@ def public_state(task,indices,history,draft,pending,proposed=None):
  return s
 
 
-def decision_prompt(evidence,kind,options=None):
+def decision_prompt(evidence,kind,options=None,question=None):
  from mentat_sys1.inference.contracts import ChoiceField,Option
  from mentat_sys1.inference.scoring import compile_question
- question,opts=spec(kind)
+ default_question,opts=spec(kind)
  if options is not None:opts=options
+ if question is None:question=default_question
  field=ChoiceField(id=kind,type='choice',question=question,options=[Option(value=k,description=v) for k,v in opts])
  header,choices,texts=compile_question(field,evidence)
  assert len(choices)==len(opts)+1

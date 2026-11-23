@@ -32,7 +32,7 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 
 ## DRIFT-inspired BM25 RAG
 
-借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md)
+借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md) · [门控消融](docs/HOTPOTQA400_GATE_ABLATION.md) · [查询逐步轨迹](docs/GATE_TRACES.md)
 
 ## 自定义输入
 
