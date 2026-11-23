@@ -1,0 +1,6 @@
+{
+  "generator_model": "your-model-name",
+  "base_url_env": "JEV_CHAT_BASE_URL",
+  "api_key_env": "JEV_CHAT_API_KEY",
+  "timeout_seconds": 60
+}

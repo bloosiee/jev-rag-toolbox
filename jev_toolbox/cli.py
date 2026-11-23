@@ -62,7 +62,7 @@ def main():
     converter.add_argument("--labeled", action="store_true")
     add_rag_parser(commands)
     args = parser.parse_args()
-    if getattr(args, "adapter_config", None) and not args.adapter:
+    if args.command in {"predict", "eval"} and args.adapter_config and not args.adapter:
         parser.error("--adapter-config requires --adapter")
     if getattr(args, "adapter", None):
         args.method = "adapter"

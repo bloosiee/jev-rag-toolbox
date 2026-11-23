@@ -45,3 +45,29 @@ jev rag score --predictions runs/custom-rag-run/predictions.json \
 ```
 
 示例适配器用固定回答演示接口。接真实模型时把两项方法换成模型调用即可。
+
+## 用自己的模型跑 RAG 并查询轨迹
+
+`chat_endpoint.py` 可以调用实现 Chat Completions 接口的本地模型服务或 API。把 `examples/adapters/chat_endpoint.json` 中的 `generator_model` 改成服务提供的模型名。可选的 `gate_model` 用来单独指定门控模型。把 API 密钥设在 `JEV_CHAT_API_KEY` 环境变量里，服务无需认证时可以省略。
+
+下面可直接使用示例测试集验证接入。替换 `--input` 即可载入自己的 JSON、JSONL 或 CSV。自行指定列名时加上 `--mapping`。
+
+```bash
+export JEV_CHAT_BASE_URL=http://127.0.0.1:8000/v1
+
+jev convert rag --input examples/custom_rag.jsonl --labeled --output runs/my-rag-data
+
+PYTHONPATH=examples/adapters jev rag run \
+  --config configs/hotpotqa_pipeline_qwen.json \
+  --tasks runs/my-rag-data/tasks.json \
+  --generator-adapter chat_endpoint:build \
+  --gate-adapter chat_endpoint:build \
+  --adapter-config examples/adapters/chat_endpoint.json \
+  --output runs/my-rag-traces
+
+jev rag trace --input runs/my-rag-traces
+jev rag trace --input runs/my-rag-traces --id question-1
+jev rag trace --input runs/my-rag-traces --id question-1 --step 1
+```
+
+这里用 `qwen` 配置中的直接选择策略，生成和判断都由适配器中指定的模型执行。端点返回选项即可。需要置信度门槛时，切换到 `jev` 策略并提供能返回选项概率的门控适配器。调用外部 API 时，检索状态和文档会发送到指定端点。轨迹保存在本地运行目录。 [轨迹字段与步骤说明](GATE_TRACES.md)

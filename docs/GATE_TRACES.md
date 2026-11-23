@@ -30,3 +30,5 @@ for mode in 95_80 80_80 80_80_compact; do
     --gold data/hotpotqa/gold.json --output "runs/hotpotqa-$mode/metrics.json"
 done
 ```
+
+使用自定义测试集和模型时，可按[接入示例](CUSTOM_INPUTS.md#用自己的模型跑-rag-并查询轨迹)生成本地运行目录，再用同样的命令查题号和步骤。
