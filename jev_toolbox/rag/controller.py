@@ -1,6 +1,8 @@
 """Run the full-document iterative RAG controller with interchangeable gates."""
 from time import perf_counter
 
+from .utils import tokens
+
 from .protocol import (
     NEXT_SCHEMA, branch_prompt, digest, documents, enqueue, next_prompt,
     parse_generated, public_state, retrieved,
@@ -38,7 +40,7 @@ def run_task(runtime, task, arm, directory, config, initial):
 
     for round_number in range(1, config["max_rounds"] + 1):
         state = public_state(task, indices, history, draft, pending)
-        if arm != "fixed" and decide(state, "sufficiency") == "sufficient":
+        if arm not in {"fixed", "rule"} and decide(state, "sufficiency") == "sufficient":
             stop = "sufficient"
             break
 
@@ -57,7 +59,14 @@ def run_task(runtime, task, arm, directory, config, initial):
         branches = []
         for index, question in enumerate(selected):
             state = public_state(task, indices, history, draft, selected[index + 1:] + pending, question)
-            action = "execute" if arm == "fixed" else decide(state, "necessity")
+            if arm == "rule":
+                fingerprint = sorted(tokens(question))
+                duplicate = bool(fingerprint) and any(
+                    sorted(tokens(row["question"])) == fingerprint for row in history
+                )
+                action = "skip" if duplicate else "execute"
+            else:
+                action = "execute" if arm == "fixed" else decide(state, "necessity")
             entry = {"question": question, "state": state, "action": action}
             if action == "execute":
                 found, _ = retrieved(task, question, config["documents_per_branch"])
@@ -83,6 +92,8 @@ def run_task(runtime, task, arm, directory, config, initial):
     adapter_events = [e for e in events if e.get("model_backend") == "adapter"]
     native_events = [e for e in events if e.get("model_backend") != "adapter"]
     jev_events = [e for e in native_events if e.get("arm") == "jev"]
+    gate_events = [e for e in events if e["kind"] == "decision"]
+    generation_events = [e for e in events if e["kind"] != "decision"]
     qwen_events = [e for e in native_events if e.get("arm") != "jev"]
     token_totals = {}
     for key in ("input_tokens", "output_tokens"):
@@ -92,6 +103,9 @@ def run_task(runtime, task, arm, directory, config, initial):
         "id": task["id"], "task_sha256": digest(task), "arm": arm, "answer": draft,
         "stop_reason": stop, "rounds": steps, "retrieved_indices": indices,
         "qwen_calls": len(qwen_events), "jev_calls": len(jev_events),
+        "generation_calls": len(generation_events), "gate_calls": len(gate_events),
+        "generation_seconds": sum(e["wall_seconds"] for e in generation_events),
+        "gate_seconds": sum(e["wall_seconds"] for e in gate_events),
         "adapter_calls": len(adapter_events),
         "adapter_seconds": sum(e["wall_seconds"] for e in adapter_events),
         **token_totals,

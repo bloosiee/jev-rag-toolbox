@@ -15,6 +15,8 @@ def read(path):
 
 def prepare(args):
     manifest = read(args.manifest)
+    dataset = manifest.get("dataset", "hotpotqa").lower()
+    wiki = dataset.startswith("2wikimultihopqa")
     parquet = args.source.suffix == ".parquet"
     if parquet:
         from pyarrow.parquet import read_table
@@ -23,15 +25,19 @@ def prepare(args):
         source = read_table(args.source).to_pylist()
     else:
         source = read(args.source)
-    by_id = unique_by_id(source) if parquet else unique_by_id([
-        {**row, "id": row["_id"]} for row in source
-    ])
+    by_id = unique_by_id([{**row, "id": row.get("id", row.get("_id"))} for row in source])
     tasks, gold = [], {}
     for entry in manifest["tasks"]:
         uid = entry["id"]
         row = by_id[uid]
         context = row["context"]
-        documents = zip(context["title"], context["sentences"]) if parquet else context
+        if isinstance(context, dict):
+            texts = context["content" if wiki else "sentences"]
+            if len(context["title"]) != len(texts):
+                raise ValueError(f"Mismatched titles and passages: {uid}")
+            context = zip(context["title"], texts)
+        documents = [(title, wiki_sentences(sentences) if wiki else sentences)
+                     for title, sentences in context]
         task = {"id": uid, "question": row["question"], "documents": [
             {"title": title, "sentences": sentences} for title, sentences in documents
         ]}
@@ -50,33 +56,53 @@ def prepare(args):
     return {"questions": len(tasks), "requests": str(args.output / "tasks.json")}
 
 
+def wiki_sentences(sentences):
+    # Match the recorded 2Wiki passage boundaries used for BM25 and prompting.
+    normalized = []
+    for sentence in sentences:
+        if normalized and sentence and not sentence[0].isspace() and not normalized[-1].endswith((" ", "\n", "\t")):
+            sentence = " " + sentence
+        normalized.append(sentence)
+    return normalized
+
+
 def unique_by_id(rows):
     by_id = {row["id"]: row for row in rows}
-    if not by_id or len(by_id) != len(rows):
+    if not by_id or any(not isinstance(uid, str) or not uid for uid in by_id) or len(by_id) != len(rows):
         raise ValueError("Expected nonempty rows with unique IDs")
     return by_id
 
 
-def run(args):
+def build_runtime(config, output, adapter_config):
     from ..adapters import load_adapter
     from .adapted_runtime import AdaptedRuntime
     from .runtime import Runtime
 
-    config = read(args.config)
+    generator = config.get("generator_adapter")
+    gate = config.get("gate_adapter")
+    needs_native = not generator or (config["arm"] not in {"fixed", "rule"} and not gate)
+    native = Runtime(config, output) if needs_native else None
+    return AdaptedRuntime(config, native, load_adapter(generator, adapter_config) if generator else None,
+                          load_adapter(gate, adapter_config) if gate else None)
+
+
+def run(args, config=None, shared=None):
+    config = dict(config) if config is not None else read(args.config)
     arm = config["arm"]
-    if arm not in {"fixed", "qwen", "jev"}:
+    if arm not in {"fixed", "qwen", "jev", "rule"}:
         raise ValueError(f"Unknown arm: {arm}")
     tasks = read(args.tasks)
     unique_by_id(tasks)
     if args.adapter_config and not (args.generator_adapter or args.gate_adapter):
         raise ValueError("--adapter-config requires a generator or gate adapter")
-    if arm == "fixed" and args.gate_adapter:
-        raise ValueError("The fixed policy has no gate to replace")
-    needs_native = not args.generator_adapter or (arm != "fixed" and not args.gate_adapter)
+    if arm in {"fixed", "rule"} and args.gate_adapter:
+        raise ValueError(f"The {arm} policy has no model gate to replace")
+    needs_native = not args.generator_adapter or (arm not in {"fixed", "rule"} and not args.gate_adapter)
     if needs_native and not (args.base and args.checkpoint):
         raise ValueError("Native generation or gating requires --base and --checkpoint")
     if args.manifest and (args.generator_adapter or args.gate_adapter):
         raise ValueError("The frozen manifest is for the original model. Omit it for a different backend.")
+    model_files = {}
     if args.manifest:
         manifest = read(args.manifest)
         if [{"id": row["id"], "request_sha256": digest(row)} for row in tasks] != manifest["tasks"]:
@@ -84,21 +110,29 @@ def run(args):
         for key, expected in manifest["model_files"].items():
             role, filename = key.split("/", 1)
             directory = args.base if role == "base" else args.checkpoint
+            model_files[str((directory / filename).resolve())] = expected
             if file_sha(directory / filename) != expected:
                 raise ValueError(f"Model input hash mismatch: {key}")
     args.output.mkdir(parents=True, exist_ok=False)
     if needs_native:
         config.update(answer_model=str(args.base.resolve()), jev_model=str(args.checkpoint.resolve()))
     config.update(generator_adapter=args.generator_adapter, gate_adapter=args.gate_adapter)
-    atomic(args.output / "run.json", {"config": config, "tasks_sha256": file_sha(args.tasks)})
-    native = Runtime(config, args.output) if needs_native else None
-    generator = load_adapter(args.generator_adapter, args.adapter_config) if args.generator_adapter else None
-    gate = load_adapter(args.gate_adapter, args.adapter_config) if args.gate_adapter else None
-    runtime = AdaptedRuntime(config, native, generator, gate)
+    atomic(args.output / "run.json", {"config": config, "tasks_sha256": file_sha(args.tasks),
+                                    "adapter_config_sha256": file_sha(args.adapter_config) if args.adapter_config else None,
+                                    "model_files_sha256": model_files,
+                                    "shared_initial": shared is not None})
+    runtime = build_runtime(config, args.output, args.adapter_config)
     predictions = []
     for index, task in enumerate(tasks):
         directory = args.output / "trace" / f"{index:04d}"
-        initial = initial_answer(runtime, task, directory / "initial", config)
+        if shared is None:
+            initial = initial_answer(runtime, task, directory / "initial", config)
+        else:
+            from .protocol import retrieved
+            indices, _ = retrieved(task, task["question"], config["initial_documents"])
+            event = read(shared / "trace" / f"{index:04d}" / "initial/initial_answer.json")
+            atomic(directory / "initial/initial_answer.json", event)
+            initial = indices, event
         result = run_task(runtime, task, arm, directory / arm, config, initial)
         predictions.append({k: v for k, v in result.items() if k != "rounds"})
     atomic(args.output / "predictions.json", predictions)
@@ -116,7 +150,8 @@ def score_predictions(rows, gold):
             f1 += compute_f1(gold[uid], row["answer"])
     n = len(predictions)
     keys = ("qwen_calls", "jev_calls", "input_tokens", "output_tokens",
-            "end_to_end_seconds", "qwen_seconds", "jev_seconds", "adapter_calls", "adapter_seconds")
+            "end_to_end_seconds", "qwen_seconds", "jev_seconds", "adapter_calls", "adapter_seconds",
+            "generation_calls", "gate_calls", "generation_seconds", "gate_seconds")
     totals = {key: (sum(row[key] for row in rows) if all(row[key] is not None for row in rows) else None)
               for key in keys if all(key in row for row in rows)}
     return {"questions": n, "exact": exact, "EM": exact / n, "F1": f1 / n, **totals}
@@ -146,6 +181,8 @@ def add_parser(commands):
             for role in ("generator", "gate"):
                 parser.add_argument(f"--{role}-adapter", help="Local Python module:factory")
         parser.set_defaults(handler=handler)
+    from .experiments import add_experiment_parsers
+    add_experiment_parsers(stages)
     lookup = stages.add_parser("trace", help="Inspect a question's recorded branches and steps")
     lookup.add_argument("--input", type=Path, required=True)
     lookup.add_argument("--id")

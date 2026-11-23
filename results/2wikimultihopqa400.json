@@ -1,0 +1,50 @@
+{
+  "metrics": {
+    "fixed": {
+      "EM_correct": 208,
+      "F1_sum": 233.33214285714286,
+      "input_tokens": 2580569,
+      "output_tokens": 99698,
+      "LLM_calls": 3760,
+      "questions": 400,
+      "LLM_seconds": 5404.04910138133,
+      "e2e_seconds": 5672.752187013626,
+      "e2e_n": 400
+    },
+    "qwen": {
+      "EM_correct": 149,
+      "F1_sum": 168.31031746031744,
+      "input_tokens": 1897151,
+      "output_tokens": 55478,
+      "LLM_calls": 4377,
+      "questions": 400,
+      "LLM_seconds": 3476.516743184766,
+      "e2e_seconds": 3583.001857995987,
+      "e2e_n": 400
+    },
+    "jev95": {
+      "EM_correct": 208,
+      "F1_sum": 234.28769841269843,
+      "input_tokens": 3353040,
+      "output_tokens": 68967,
+      "LLM_calls": 2907,
+      "Jev_calls": 1990,
+      "questions": 400,
+      "LLM_seconds": 3900.6563657862134,
+      "Jev_seconds": 479.5646439597476,
+      "e2e_seconds": 4504.963041543961,
+      "e2e_n": 400
+    }
+  },
+  "paired": {
+    "fixed": {
+      "improved": 25,
+      "regressed": 25
+    },
+    "qwen": {
+      "improved": 74,
+      "regressed": 15
+    }
+  },
+  "questions": 400
+}

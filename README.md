@@ -40,6 +40,10 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 
 借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md) · [门控消融](docs/HOTPOTQA400_GATE_ABLATION.md) · [查询逐步轨迹](docs/GATE_TRACES.md)
 
+## 一键对比与诊断
+
+`jev rag compare` 支持在固定 HotpotQA 或 2WikiMultiHopQA 划分上比较多种门控；`jev rag diagnose` 对照同题轨迹；`jev rag replay` 强制指定 Jev 节点的选项并重跑后续。 [离线示例、实验配置和回放命令](docs/EXPERIMENTS.md)
+
 ## 自定义输入
 
 用 `jev convert` 导入决策日志或 RAG 测试集。用 Python 适配器接入自己的生成模型或门控模型。 [自定义输入与适配器示例](docs/CUSTOM_INPUTS.md)
