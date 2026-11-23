@@ -1,6 +1,0 @@
-{
-  "decision_readout.safetensors": "98c7ec4bf7319fb8766797157968a08e270b58147313d8834f56d882b6fbe099",
-  "adapter_model.safetensors": "49d53adfa25750b3b5b86abfc94a12146ea5ac3101cbd8d05edec86bab331f5c",
-  "decision_readout.json": "4bc0237812d7d8c2611e60f1e7d0de8f108a9c18fbb8402aefecc3c71c54d68c",
-  "adapter_config.json": "909da6856554d74c1ac04d84d3b1c402f3cbeeb906a64b00eb5b46780fec972c"
-}

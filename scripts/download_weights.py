@@ -13,7 +13,7 @@ MANIFEST = Path(__file__).resolve().parents[1] / "models/release-manifest.json"
 
 def download(model, directory):
     manifest = json.loads(MANIFEST.read_text())
-    bundle = manifest["models"][model]
+    bundle = manifest["models"]["v1" if model == "joint" else model]
     directory.mkdir(parents=True, exist_ok=True)
     destination = directory / bundle["archive"]
     if destination.exists():
@@ -43,7 +43,8 @@ def download(model, directory):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("model", choices=("sufficiency", "necessity", "joint"))
+    available = tuple(json.loads(MANIFEST.read_text())["models"])
+    parser.add_argument("model", choices=(*available, "joint"))
     parser.add_argument("--output", type=Path, default=Path("checkpoints"))
     args = parser.parse_args()
     print(download(args.model, args.output))
