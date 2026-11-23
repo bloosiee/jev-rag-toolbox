@@ -1,0 +1,79 @@
+{
+  "questions": 400,
+  "metrics": {
+    "fixed": {
+      "EM_correct": 208,
+      "F1_sum": 233.33214285714286,
+      "input_tokens": 2580569,
+      "output_tokens": 99698,
+      "LLM_calls": 3760,
+      "questions": 400,
+      "LLM_seconds": 5404.04910138133,
+      "e2e_seconds": 5672.752187013626,
+      "e2e_n": 400
+    },
+    "qwen": {
+      "EM_correct": 149,
+      "F1_sum": 168.31031746031744,
+      "input_tokens": 1897151,
+      "output_tokens": 55478,
+      "LLM_calls": 4377,
+      "questions": 400,
+      "LLM_seconds": 3476.516743184766,
+      "e2e_seconds": 3583.001857995987,
+      "e2e_n": 400
+    },
+    "jev95": {
+      "EM_correct": 208,
+      "F1_sum": 234.28769841269843,
+      "input_tokens": 3353040,
+      "output_tokens": 68967,
+      "LLM_calls": 2907,
+      "Jev_calls": 1990,
+      "questions": 400,
+      "LLM_seconds": 3900.6563657862134,
+      "Jev_seconds": 479.5646439597476,
+      "e2e_seconds": 4504.963041543961,
+      "e2e_n": 400
+    },
+    "jev_v2_95": {
+      "questions": 400,
+      "EM_correct": 209,
+      "F1_sum": 236.87341269841272,
+      "input_tokens": 2479487,
+      "output_tokens": 51113,
+      "LLM_calls": 2157,
+      "Jev_calls": 1509,
+      "LLM_seconds": 2858.4584298357368,
+      "Jev_seconds": 365.8668428128585,
+      "e2e_n": 400,
+      "e2e_seconds": 3355.2335273940116,
+      "valid": 399,
+      "stop_reasons": {
+        "no_pending_questions": 64,
+        "sufficient": 250,
+        "round_budget": 85,
+        "output_cap": 1
+      }
+    }
+  },
+  "paired": {
+    "fixed": {
+      "improved": 26,
+      "regressed": 25,
+      "same": 349
+    },
+    "qwen": {
+      "improved": 75,
+      "regressed": 15,
+      "same": 310
+    },
+    "v1_matching_policy": {
+      "improved": 15,
+      "regressed": 14,
+      "same": 371
+    }
+  },
+  "calibration_policy": "reuse exact v1 temperatures for matched weight comparison",
+  "trace_sha256": "99c9a958589b62d9fa038b1c4a04c23effc296bd188611867891c5f3f27e7f57"
+}

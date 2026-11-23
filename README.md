@@ -2,6 +2,31 @@
 
 训练和评测迭代 RAG 的 Jev 门控。联合模型使用同一套适配器和读出层，支持充分性与必要性判断。
 
+## 快速体验：改一个停搜决定
+
+HotpotQA 有一道题问 Charlie Nicholas 在苏格兰联赛杯决赛为哪支球队效力。v2 的草稿答了球员名，Jev 以 **95.30%** 的置信度判定充分并停搜，标准答案是 **Celtic**。在真实回放中，只把这个节点改成「继续」，最终就答出了 Celtic，额外用了 3 次 Qwen 调用和 2 次 Jev 判断。 [真实诊断与回放结果](docs/CELTIC_REPLAY.md)
+
+下面的第一条命令查看公开的真实决策记录，第二条用虚构的同类题跑两种选择。
+
+在仓库根目录运行。安装只需要基础 Python 包，不需要 GPU、模型权重或 API 密钥。
+
+```bash
+python -m pip install -e .
+jev rag trace --input results/hotpotqa400_v2_traces.jsonl.gz \
+  --id 5abe48675542991f66106119 --step 1
+python examples/replay_demo.py
+```
+
+演示复用同一个初稿，分别强制第一个充分性节点选 `sufficient` 和 `continue`。
+
+| 演示中的选择 | 最终答案 | EM | 分叉后的生成调用 |
+| --- | --- | ---: | ---: |
+| 直接提交 | Alex Rivera | 0 | 0 |
+| 继续并重写 | North Town FC | 1 | 3 |
+
+演示使用确定性适配器，输出用于说明回放流程。真实 HotpotQA 记录来自已完成的实验。 [真实结果](results/HOTPOTQA400_V2.md) · [接入自己的模型与测试集](docs/EXPERIMENTS.md)
+
+
 | 模型版本 | 训练方式 | 权重下载 |
 | --- | --- | --- |
 | v1 | 原始充分性数据与教师标注必要性数据联合训练 | [下载权重](models/README.md#下载-v1-权重) |
