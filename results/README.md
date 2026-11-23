@@ -21,6 +21,10 @@
 
 此分区用于独立的 9B 生成器对照。计划在固定题集上比较 **9B 无门控**和**9B + Jev v2 95/95**，两组共享 9B 初稿。目前暂无已核验结果。
 
+## 重新生成 README 图表
+
+在仓库根目录运行 `python scripts/plot_rag_results.py`，从已核验的 JSON 生成 `results/figures/` 下的 PNG。绘图需要 Matplotlib。开展新一轮实验时，用 `--extra` 传入额外的图表定义，每个定义包含 `title`、`filename` 和 `rows`。每行依次填写显示名称、颜色键（`fixed`、`qwen` 或 Jev 版本）和该组完整的 400 题结果对象。同一图内保留同一题集和生成模型。缺少核验结果的组合标为待完成。
+
 ## 查看报告与轨迹
 
 用 `jev rag compare --published results/hotpotqa400.json` 查看 v1 主实验汇总。用 `jev rag trace --input <轨迹索引> --id <题号>` 查看逐步轨迹。 [命令与字段说明](../docs/EXPERIMENTS.md)

@@ -40,6 +40,28 @@ python examples/replay_demo.py
 
 在迭代搜索中，`sufficient` 可以触发生成最终答案，`execute` 可以触发一次检索。执行后的证据写回状态，供下一轮判断。Jev 返回选项和概率，检索、生成和停止条件由流程代码控制。
 
+## 实验对比图
+
+按 Qwen **生成模型**分组，Jev v1／v2／v3 表示**门控权重**。图中正确率使用 EM，并列出 F1、输入与输出合计 token、两类调用次数，以及端到端、Qwen 和 Jev 耗时。调用与 token 按 400 题累计，耗时按每题平均。门槛按充分性／必要性排列。各次运行的缓存和调度会影响时间，端到端耗时与两类模型调用耗时分别统计。 [结果表与逐题轨迹](results/README.md)
+
+### Qwen3.5-4B
+
+**HotpotQA 400 题消融。** 每张图包含无门控和 Qwen 门控两条基线，以及对应 Jev 版本的全输入 95/95、全输入 95/80、全输入 80/80、精简充分性 80/80。 [v1 数据](results/HOTPOTQA400_GATE_ABLATION.md) · [v2 数据](results/HOTPOTQA400_V2_ABLATION.md)
+
+![HotpotQA 400：Qwen 4B 与 Jev v1 各消融设置和基线的八项指标](results/figures/hotpotqa-qwen4b-v1-ablation.png)
+
+![HotpotQA 400：Qwen 4B 与 Jev v2 各消融设置和基线的八项指标](results/figures/hotpotqa-qwen4b-v2-ablation.png)
+
+**95/95 同题对照。** HotpotQA 和 2Wiki 分开画，各自使用同题基线。图中已纳入 v1、v2，v3 评测完成后在对应图中新增一行。 [HotpotQA 数据](results/HOTPOTQA400_V2.md) · [2Wiki 数据](results/2WIKIMULTIHOPQA400_V2.md)
+
+![HotpotQA 400：Qwen 4B 基线及 Jev v1、v2 的 95/95 对照](results/figures/hotpotqa-qwen4b-9595.png)
+
+![2WikiMultiHopQA 400：Qwen 4B 基线及 Jev v1、v2 的 95/95 对照](results/figures/2wiki-qwen4b-9595.png)
+
+### Qwen3.5-9B
+
+9B 的消融和 95/95 对照使用 9B 自己的同题基线，单独成图。当前尚无已核验的 9B 结果。
+
 ## 快速试跑
 
 ```bash
