@@ -1,0 +1,114 @@
+{
+  "questions": 400,
+  "summary": {
+    "95_80": {
+      "correct": 201,
+      "n": 400,
+      "F1": 0.6318406542288121,
+      "valid": 400,
+      "stop_reasons": {
+        "sufficient": 275,
+        "round_budget": 58,
+        "no_pending_questions": 67
+      },
+      "qwen_calls": 1572,
+      "jev_calls": 1182,
+      "input_tokens": 1528608,
+      "output_tokens": 34969,
+      "qwen_seconds": 1953.2440929133445,
+      "jev_seconds": 242.7298878931906,
+      "end_to_end_seconds": 2290.578354725614
+    },
+    "80_80": {
+      "correct": 204,
+      "n": 400,
+      "F1": 0.6373406542288121,
+      "valid": 400,
+      "stop_reasons": {
+        "sufficient": 323,
+        "round_budget": 41,
+        "no_pending_questions": 36
+      },
+      "qwen_calls": 1357,
+      "jev_calls": 1027,
+      "input_tokens": 1319124,
+      "output_tokens": 29690,
+      "qwen_seconds": 1619.6474905812647,
+      "jev_seconds": 210.6960693700239,
+      "end_to_end_seconds": 1909.514522752259
+    },
+    "compact_80_80": {
+      "correct": 203,
+      "n": 400,
+      "F1": 0.6325352980352981,
+      "valid": 400,
+      "stop_reasons": {
+        "no_pending_questions": 181,
+        "round_budget": 106,
+        "sufficient": 113
+      },
+      "qwen_calls": 2371,
+      "jev_calls": 1774,
+      "input_tokens": 1967748,
+      "output_tokens": 54699,
+      "qwen_seconds": 3182.5412755231373,
+      "jev_seconds": 275.16043705958873,
+      "end_to_end_seconds": 3609.1972197638825
+    }
+  },
+  "paired": {
+    "95_80": {
+      "fixed": {
+        "improved": 11,
+        "regressed": 21,
+        "same": 368
+      },
+      "qwen": {
+        "improved": 57,
+        "regressed": 5,
+        "same": 338
+      },
+      "v1_matching_policy": {
+        "improved": 3,
+        "regressed": 8,
+        "same": 389
+      }
+    },
+    "80_80": {
+      "fixed": {
+        "improved": 11,
+        "regressed": 18,
+        "same": 371
+      },
+      "qwen": {
+        "improved": 59,
+        "regressed": 4,
+        "same": 337
+      },
+      "v1_matching_policy": {
+        "improved": 7,
+        "regressed": 5,
+        "same": 388
+      }
+    },
+    "compact_80_80": {
+      "fixed": {
+        "improved": 10,
+        "regressed": 18,
+        "same": 372
+      },
+      "qwen": {
+        "improved": 61,
+        "regressed": 7,
+        "same": 332
+      },
+      "v1_matching_policy": {
+        "improved": 4,
+        "regressed": 7,
+        "same": 389
+      }
+    }
+  },
+  "calibration_policy": "reuse exact v1 temperatures for matched weight comparison",
+  "trace_sha256": "0c83b5b494d33d8056f92bf9d7c892e7dd62ece50ed1a31f8864e6bb2a5e7450"
+}
