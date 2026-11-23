@@ -1,20 +1,23 @@
-# 联合模型卡
+# 单任务模型卡
 
-| 版本 | 充分性训练 | 必要性训练 | 状态 |
-| --- | --- | --- | --- |
-| v1 | SufficiencyBench v1.1，2,704 个状态 | RAG-Necessity-987，1,822 个教师标注状态 | 已发布，batch 16，学习率 2e-5 |
-| v2 | 真实轨迹的草稿充分性，927 个状态 | 同 v1 | 训练中 |
-| v3 | 以 v2 为对照 | 按 Wang 等的条件交互框架，用执行和跳过的终局结果生成动作标签 | [训练方案](../docs/TRAINING.md#v3-分叉结果监督) · 计划中 |
+两个模型从原始 Mentat v0.3 的 LoRA 适配器和 FP32 读出层分别初始化并独立训练，基座为 Qwen3.5-4B。
 
-v1 对应现有 [400 题端到端评估](../docs/ITERATIVE_RAG.md)及[门控消融](../docs/HOTPOTQA400_GATE_ABLATION.md)。v2 在固定划分上按充分性验证准确率 60%、必要性验证准确率 40% 选择联合模型。
+| 模型 | 判断目标 | 入选配置 | 测试准确率 | 原始 Mentat v0.3 | 补充指标 |
+| --- | --- | --- | --- | --- | --- |
+| `sufficiency` | 检索证据是否足够回答原问题 | batch 16，学习率 2e-5 | 2,014 / 2,138（94.20%） | 1,689 / 2,138（79.00%） | AUROC 0.9809 |
+| `necessity` | 执行追问、证据已覆盖或对原问题无帮助 | batch 64，学习率 1e-5 | 337 / 396（85.10%） | 310 / 396（78.28%） | macro-F1 0.7962 |
 
-## 下载 v1 权重
+分数按各自测试集的决策状态计算。充分性使用 SufficiencyBench，必要性分数衡量与教师标签的一致性。 [数据卡](../docs/DATASETS.md)
 
-[GitHub Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/v0.1.0-models) 提供 v1 联合模型的分卷。脚本依次核验分卷和压缩包的 SHA-256。
+## 下载权重
+
+从 [单任务模型 Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/single-task-models-v1) 下载，脚本校验各分卷和组装后的压缩包。
 
 ```bash
-python scripts/download_weights.py v1
-tar -xzf checkpoints/joint.tar.gz -C checkpoints
+python scripts/download_weights.py sufficiency
+python scripts/download_weights.py necessity
+tar -xzf checkpoints/sufficiency.tar.gz -C checkpoints
+tar -xzf checkpoints/necessity.tar.gz -C checkpoints
 ```
 
-将 `checkpoints/joint` 传给 `--checkpoint`。权重目录包含 LoRA、决策读出层及配置，详见[文件校验清单](joint.sha256.json)。基座从上游获取。 [Qwen3.5-4B 固定版本](https://huggingface.co/Qwen/Qwen3.5-4B/tree/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a) · [Mentat v0.3 初始化模型](https://huggingface.co/yunqu/mentat-sys1-v0.3)
+将 `checkpoints/sufficiency` 或 `checkpoints/necessity` 传给相应任务的 `--checkpoint`。压缩包内含 LoRA、决策读出层、配置和许可。 [充分性 SHA-256](sufficiency.sha256.json) · [必要性 SHA-256](necessity.sha256.json) · [Qwen3.5-4B 基座](https://huggingface.co/Qwen/Qwen3.5-4B/tree/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a)

@@ -1,12 +1,6 @@
-# Jev-RAG Toolbox
+# Jev-RAG Toolbox 单任务模型
 
-训练和评测迭代 RAG 的 Jev 门控。联合模型使用同一套适配器和读出层，支持充分性与必要性判断。
-
-| 模型版本 | 训练方式 | 发布状态 |
-| --- | --- | --- |
-| v1 | 原始充分性数据与教师标注必要性数据联合训练 | [下载权重](models/README.md#下载-v1-权重) |
-| v2 | 真实迭代轨迹的草稿充分性与原必要性数据联合训练 | 训练中 |
-| v3 | 按 Wang 等的条件交互框架，用同状态分叉的实际结果监督门控 | [训练方案](docs/TRAINING.md#v3-分叉结果监督) · 计划中 |
+此分支收录分别训练的充分性和必要性模型。模型包包含 LoRA 适配器与决策读出层。联合门控模型和迭代 RAG 实验见 [主分支](https://github.com/bloosiee/jev-rag-toolbox/tree/main)。
 
 | 决策 | 输入 | 输出 |
 | --- | --- | --- |
@@ -36,19 +30,9 @@ jev eval --config configs/sufficiency.json --split val --method jev \
 
 `--method` 支持 `jev`、`qwen`、`rule`。Qwen 禁用 adapter，从相同输入的候选字母 logits 取最大值。固定规则始终继续检索或执行追问。评测先写 `predictions.json`，再读取标签并写 `metrics.json`。指标包括准确率、macro-F1、混淆矩阵，以及有概率输出时的充分性 AUROC。
 
-## DRIFT-inspired BM25 RAG
+## 权重、数据与训练
 
-借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [HotpotQA 400 题复现与结果](docs/ITERATIVE_RAG.md) · [门控消融](docs/HOTPOTQA400_GATE_ABLATION.md) · [查询逐步轨迹](docs/GATE_TRACES.md)
-
-## 自定义输入
-
-用 `jev convert` 导入决策日志或 RAG 测试集。用 Python 适配器接入自己的生成模型或门控模型。 [自定义输入与适配器示例](docs/CUSTOM_INPUTS.md)
-
-## 训练与结果
-
-- [数据卡](docs/DATASETS.md)记录训练数据的来源、字段、标签及冻结划分。
-- [训练复现](docs/TRAINING.md)说明联合训练网格与任务级训练接口。
-- [模型卡](models/README.md)记录已有模型配置、评测成绩和权重校验方式。
-- [仓库约定](docs/CONVENTIONS.md)记录目录设计、实验记录规范和参考仓库。
-
-复现需要原始 Qwen3.5-4B、Mentat v0.3 权重与对应源码。将训练和评测所需的 JSON 放到对应的 `data/<task>/` 目录。用 `data/*/FILES_SHA256.json` 核对版本。模型卡列出了权重校验值。
+- [模型卡和权重下载](models/README.md)
+- [数据卡](docs/DATASETS.md)
+- [单任务训练接口](docs/TRAINING.md#任务级训练接口)
+- [自定义输入与适配器](docs/CUSTOM_INPUTS.md)
