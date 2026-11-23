@@ -1,149 +1,149 @@
 {
-  "tag": "single-task-models-v1",
+  "tag": "single-task-models-v2",
   "models": {
     "sufficiency": {
       "archive": "sufficiency.tar.gz",
-      "sha256": "62a496187098192d0b48aa63550fd367b475b212cf4df0c84039c50f694e83b0",
+      "sha256": "eebcb8e03ac71c0037657cd689e4a5bac3c4e9c56db2efe712a1529c56605f8c",
       "parts": [
         {
           "name": "sufficiency.tar.gz.part000",
           "size": 16777216,
-          "sha256": "ece032597c13b115612e5c766728f416c7c540838cc83d677edd3f9eb134acf2"
+          "sha256": "e1cfcbc25b24b26eddc1382c6d51d7e7460ede6e181c0e27028836e29ad287a6"
         },
         {
           "name": "sufficiency.tar.gz.part001",
           "size": 16777216,
-          "sha256": "3961acfed00c109c2dacd20c7add1f8a667d087f9012be5eb9e949a0d355d445"
+          "sha256": "c2b507538304b6ceb9097480687191678749c460f693c90df28c40f5bc530240"
         },
         {
           "name": "sufficiency.tar.gz.part002",
           "size": 16777216,
-          "sha256": "1bd8b73d0207ca23ad760b5647bd1e4682cab064e130f036b715efac9610ecd3"
+          "sha256": "dcf972b2467fc46f621bd7d9c5d1594e69a1fdd3974acb391ea1e014f06476f2"
         },
         {
           "name": "sufficiency.tar.gz.part003",
           "size": 16777216,
-          "sha256": "d44606bb02d46feb6c92ec3687cc13796b2ac808154533f5b3124666c2487bb6"
+          "sha256": "bf9edebbf1b2e15493726be8495f0e9ad1c83273c2ef5b04e699d8befbd46539"
         },
         {
           "name": "sufficiency.tar.gz.part004",
           "size": 16777216,
-          "sha256": "723232a664bd7ae3e2112b5d740d9b33ceb12c8e53f3aada2a17f32913217149"
+          "sha256": "b0b0a2051cf08ab54562162faa8ae55f464d3b37f83e3735b3919f4713632aa3"
         },
         {
           "name": "sufficiency.tar.gz.part005",
           "size": 16777216,
-          "sha256": "5d7c42f6f2fa54858eff866ea72eebb42bf13e0fa6032d5cd7d5fcb5435cbf4c"
+          "sha256": "5aa5c772ad3dfc8fcd6128d4764463cbe7907c82a0eacad44704b33db14048b6"
         },
         {
           "name": "sufficiency.tar.gz.part006",
           "size": 16777216,
-          "sha256": "70139721b8b07d99c6a3405d4716db6ffc06fe37e4e5e24193b2f6758f7e9558"
+          "sha256": "728bd427e35e228555ad0258cc969ec99d8b4899a737401e771ed09b02d30595"
         },
         {
           "name": "sufficiency.tar.gz.part007",
           "size": 16777216,
-          "sha256": "fa52897f1f611c7f959b60fe46317a7a4499223af1f573e49a04d9ca7e6bb438"
+          "sha256": "a600935910dafb077b45469418793d632c2acbb7c0477262d96f00a4b1095c7b"
         },
         {
           "name": "sufficiency.tar.gz.part008",
           "size": 16777216,
-          "sha256": "3bd5b1f2f00c8893f1e792dea952bcf325bdcb29e7cbe2b215446dc9a61b30ce"
+          "sha256": "732d6074cbbc0568bb71bc9740000e132273fe306bdde18d95271c6197c2050a"
         },
         {
           "name": "sufficiency.tar.gz.part009",
           "size": 16777216,
-          "sha256": "f8b6cd17c679b7dd1e409aa1f6592251e1f2f9455bd8e0728c19fa0e9548f77f"
+          "sha256": "99a9f44d74621e7c300bbcc3bfeb571b2cfd6712528ab3e8777045b08fb9091a"
         },
         {
           "name": "sufficiency.tar.gz.part010",
           "size": 16777216,
-          "sha256": "36d7ba79a1e8286177718c4afb8a5f83ebac7a33ff817b724821e845a0f23a70"
+          "sha256": "baf2e1865bf739203b623cc4a4aac1ecacc70c0f74e8c3769eb79fa41f6fec84"
         },
         {
           "name": "sufficiency.tar.gz.part011",
           "size": 16777216,
-          "sha256": "1bbed7272c04e6816d56728e4fcfce4caec51db58de5c3aaf497fb048a26cdc2"
+          "sha256": "3a40c5b8f45135462252b20789d35c3a5c060bdfd62572f7857ae990f5b6e63a"
         },
         {
           "name": "sufficiency.tar.gz.part012",
           "size": 16777216,
-          "sha256": "1045f32e0e7da1faf9895c5e7837b7bd5c871f0030aeb43cf21f12d90eb03acf"
+          "sha256": "c64888d3594f14848107f4d9ba2926f3721bc03993f0de98f1113cc84bdec582"
         },
         {
           "name": "sufficiency.tar.gz.part013",
           "size": 16777216,
-          "sha256": "508fe8adc96bd3ed28345592a34b64cce0c46218a9885b51ff1fd026108cb0e1"
+          "sha256": "308b43eba96a571ae3c0999fff9384225720955847fa93968886e48c74a5cbd3"
         },
         {
           "name": "sufficiency.tar.gz.part014",
           "size": 16777216,
-          "sha256": "21ed6687e529971ae09e05e7d331b949549cd76133b86e07f24f019860612661"
+          "sha256": "0d70fd50496b022dcb66f754d510ac3cad0e07df52bcc7c6870d18abd3f45628"
         },
         {
           "name": "sufficiency.tar.gz.part015",
           "size": 16777216,
-          "sha256": "a6a8a0e3c94000e5ab512e97a2afe73ce23d99d586107294bf8bc6c39476cc19"
+          "sha256": "168f3c6953e05924d8649522f13d228c4da2c55ce21d92043b9135c76a0d193c"
         },
         {
           "name": "sufficiency.tar.gz.part016",
           "size": 16777216,
-          "sha256": "51f5b22af79c7eb2f63fceac5a825ef0cce501245dff4705e7f53fcd1e49d673"
+          "sha256": "3dc459937fee4b00938f547793c4143ceffdb5bc172eb1a6f4dc034228dbde04"
         },
         {
           "name": "sufficiency.tar.gz.part017",
           "size": 16777216,
-          "sha256": "5c53aad62eb97f7f8f55df401aa09ec8a3cfb6c64a4d59b327e9b1f4c4fd18a0"
+          "sha256": "0fdf9d75c69f2b0241b8b8f439f7aeb871656772a4aeec7a5a42a1ab278ee506"
         },
         {
           "name": "sufficiency.tar.gz.part018",
           "size": 16777216,
-          "sha256": "e5b7ed1b5b752f27e8b699981da44105f90f24bb1beb582be84b7699d7f8f72e"
+          "sha256": "4ff4e23b441d56733cc185fbc09593991fc5808a73bb1b619cd9f84810625a39"
         },
         {
           "name": "sufficiency.tar.gz.part019",
           "size": 16777216,
-          "sha256": "284dbb28b44dc8ac9488e18676b2d6c116ab9033f584484e8852565fd60e8d89"
+          "sha256": "9e622cb10644ecae4d962e93b320b2695c121ca184ed013d8061ea1462209d05"
         },
         {
           "name": "sufficiency.tar.gz.part020",
           "size": 16777216,
-          "sha256": "63e646d7153d6049487c40efcc7cb0c3b9acace87190c021730d52750c3d9b9d"
+          "sha256": "e5614c89ec82d29f7c4d8ec99cfd16116e6084ab226a32c5c62cc156fd467728"
         },
         {
           "name": "sufficiency.tar.gz.part021",
           "size": 16777216,
-          "sha256": "bd1f61a2ba618f7e37c33506a5cd6ab93cc8a15f95bfec546b1b6bf0f5657c8d"
+          "sha256": "8f08074f45e8d954bc13e312fe0edf21ab3582e92895faa713bf53b4a294a03b"
         },
         {
           "name": "sufficiency.tar.gz.part022",
           "size": 16777216,
-          "sha256": "cf55e3a1e2e076971f8036b4ed6b17adda8ed01651be1a1a16d981f96a947994"
+          "sha256": "50b09f121cb9f0c70dfe879e385d1ed05c211863117a7edb3473590227356eca"
         },
         {
           "name": "sufficiency.tar.gz.part023",
           "size": 16777216,
-          "sha256": "a5b1c1478d5508212a48bc01f9db8cc8b4238e58cea077dbb7c787cebfc07bdd"
+          "sha256": "8ba4f4c71167d1dc1530bd5a16b23521c0e3037a750adbd9729a0f451dfa3060"
         },
         {
           "name": "sufficiency.tar.gz.part024",
           "size": 16777216,
-          "sha256": "b4e1ec52a0b99cc7f71cbfcb9c0566234850bb07ac1030632f406fc2b935a1f6"
+          "sha256": "cb711aa694aeb956054f4a0b3166b5368df41086a8971428842f2c8c2361e582"
         },
         {
           "name": "sufficiency.tar.gz.part025",
           "size": 16777216,
-          "sha256": "90739ce69cfbf8f0a4e93edcee604d9b22464fd717c3c6b66abd1bac1a573bdc"
+          "sha256": "24c909386fd16de169106dd4433586e03545dca3acb7a86c45dfb64a05e4998f"
         },
         {
           "name": "sufficiency.tar.gz.part026",
           "size": 16777216,
-          "sha256": "22e37e37710c2b71566e0c64ac5bfbaa584087ac329c274b64f26459f70fdd61"
+          "sha256": "b2413ba398f089b85213066f8af2fc9acac69b3214d5dd6cc8317b3bf457d21f"
         },
         {
           "name": "sufficiency.tar.gz.part027",
-          "size": 2014986,
-          "sha256": "839051adfd60058aa99dcc69b737229cea6719d8fbd741aaf79791f71285cfa6"
+          "size": 746965,
+          "sha256": "e9ab6d39d49efe7ec4793518da07d3a9dca4fb373cc8fd261b05efdc14c5cd7f"
         }
       ]
     },
@@ -291,7 +291,8 @@
           "size": 2053050,
           "sha256": "720c097f0354d48ad8289fbf50c2885d6f6c6a292308c74d6b0c22922e147f9e"
         }
-      ]
+      ],
+      "tag": "single-task-models-v1"
     }
   }
 }
