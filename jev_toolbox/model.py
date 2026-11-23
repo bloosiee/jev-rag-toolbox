@@ -3,12 +3,17 @@ from pathlib import Path
 from time import perf_counter
 
 from .protocol import SPECS, compile_prompt, digest
+from .rag.protocol import spec as rag_spec
+
+PREDICTION_TASKS = (*SPECS, "trajectory_sufficiency")
 
 
 def normalize(task, row):
-    question, options = SPECS[task]
+    trajectory = task == "trajectory_sufficiency"
+    kind = "sufficiency" if trajectory else task
+    question, options = rag_spec(kind) if trajectory else SPECS[kind]
     canonical = {
-        "kind": task, "question": question,
+        "kind": kind, "question": question,
         "options": [dict(value=value, description=desc) for value, desc in options],
     }
     for key, value in canonical.items():
@@ -16,8 +21,10 @@ def normalize(task, row):
             raise ValueError(f"{row['id']}: unexpected {key} for {task}")
     state = row["state"]
     required = {"original_question", "retrieved_documents"}
+    if task == "necessity" or trajectory:
+        required.update({"executed_followups", "current_intermediate_answer", "pending_questions"})
     if task == "necessity":
-        required.update({"executed_followups", "current_intermediate_answer", "pending_questions", "proposed_followup"})
+        required.add("proposed_followup")
     if set(state) != required:
         raise ValueError(f"{row['id']}: state keys must be {sorted(required)}")
     return {"id": row["id"], "state": state, **canonical}
@@ -46,7 +53,7 @@ class DecisionModel:
         values = [option["value"] for option in row["options"]]
         prediction = {"id": row["id"], "task": task, "method": self.method}
         if self.method == "rule":
-            choice = {"sufficiency": "insufficient", "necessity": "execute"}[task]
+            choice = "execute" if task == "necessity" else values[1]
             return dict(prediction, choice=choice, probabilities=None)
         torch = self.torch
         engine = self.engine

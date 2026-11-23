@@ -6,7 +6,7 @@ from pathlib import Path
 from .adapters import load_adapter, predict as adapter_predict
 from .converters import convert
 from .evaluation import evaluate
-from .model import DecisionModel
+from .model import DecisionModel, PREDICTION_TASKS
 from .protocol import SPECS, atomic, file_sha
 from .training import prepare, verify
 from .rag.commands import add_parser as add_rag_parser
@@ -33,7 +33,7 @@ def main():
     parser = argparse.ArgumentParser(prog="jev")
     commands = parser.add_subparsers(dest="command", required=True)
     predict = commands.add_parser("predict", help="Score one request")
-    predict.add_argument("--task", choices=SPECS, required=True)
+    predict.add_argument("--task", choices=PREDICTION_TASKS, required=True)
     predict.add_argument("--request", type=Path, required=True)
     benchmark = commands.add_parser("eval", help="Score a frozen validation or test split")
     inputs = benchmark.add_mutually_exclusive_group(required=True)

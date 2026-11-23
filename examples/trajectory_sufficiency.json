@@ -1,0 +1,12 @@
+{
+  "id": "trajectory-sufficiency-example",
+  "state": {
+    "original_question": "Which team did the player from the example join?",
+    "retrieved_documents": [
+      {"title": "Team history", "text": "Alex Rivera joined North Town FC in 2010."}
+    ],
+    "executed_followups": [],
+    "current_intermediate_answer": "Alex Rivera",
+    "pending_questions": []
+  }
+}
