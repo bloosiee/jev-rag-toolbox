@@ -1,5 +1,27 @@
 # 自定义日志、测试集和模型
 
+## 试跑和评测单项门控
+
+在仓库根目录安装软件包。规则策略可在没有 GPU 和权重的环境中试跑。
+
+```bash
+python -m pip install -e .
+jev predict --task necessity --method rule --request examples/necessity.json
+```
+
+使用原生模型时，将 `BASE` 指向 Qwen3.5-4B，将 `CKPT` 指向包含适配器与读出层的目录，将 `MENTAT_SRC` 指向 Mentat 源码的 `src` 目录。 [权重和模型版本](../models/README.md)
+
+```bash
+python -m pip install -r requirements-model.txt
+export PYTHONPATH="$MENTAT_SRC${PYTHONPATH:+:$PYTHONPATH}"
+jev predict --task sufficiency --request examples/sufficiency.json \
+  --base "$BASE" --checkpoint "$CKPT"
+jev eval --config configs/sufficiency.json --split val --method jev \
+  --base "$BASE" --checkpoint "$CKPT" --output runs/suff-jev-val
+```
+
+单项门控支持 `jev`、`qwen`、`rule`。Qwen 禁用适配器并从相同提示的候选字母 logits 取最大值。规则策略始终继续检索或执行追问。评测先写预测，再读取标签计算准确率、macro-F1、混淆矩阵及有概率输出时的充分性 AUROC。
+
 ## 决策日志
 
 支持 JSON 数组、JSONL 和 CSV。用映射文件把标准字段名指向源字段，点号可定位嵌套字段。CSV 的文档、历史追问和问题队列列使用 JSON 字符串。字段名已匹配时省略 `--mapping`。
@@ -70,4 +92,4 @@ jev rag trace --input runs/my-rag-traces --id question-1
 jev rag trace --input runs/my-rag-traces --id question-1 --step 1
 ```
 
-这里用 `qwen` 配置中的直接选择策略，生成和判断都由适配器中指定的模型执行。端点返回选项即可。需要置信度门槛时，切换到 `jev` 策略并提供能返回选项概率的门控适配器。调用外部 API 时，检索状态和文档会发送到指定端点。轨迹保存在本地运行目录。 [轨迹字段与步骤说明](GATE_TRACES.md)
+这里用 `qwen` 配置中的直接选择策略，生成和判断都由适配器中指定的模型执行。端点返回选项即可。需要置信度门槛时，切换到 `jev` 策略并提供能返回选项概率的门控适配器。调用外部 API 时，检索状态和文档会发送到指定端点。轨迹保存在本地运行目录。 [轨迹字段与步骤说明](EXPERIMENTS.md#查看逐步轨迹)

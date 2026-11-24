@@ -74,45 +74,14 @@ python examples/replay_demo.py
 
 ![2WikiMultiHopQA 400：Qwen 9B 基线及 Jev v1、v2 的 95/95 对照](results/figures/2wiki-qwen9b-9595.png)
 
-## 快速试跑
+## 文档导航
 
-```bash
-python -m pip install --upgrade 'pip>=23'
-python -m pip install -e .
-jev predict --task necessity --method rule --request examples/necessity.json
-```
-
-Jev 和 Qwen 对照共用 Mentat 的原生提示格式。设置 `BASE` 为 Qwen3.5-4B 目录，`CKPT` 为对应 adapter/readout 目录，`MENTAT_SRC` 为 Mentat 源码目录。
-
-```bash
-python -m pip install -r requirements-model.txt
-export PYTHONPATH="$MENTAT_SRC${PYTHONPATH:+:$PYTHONPATH}"
-jev predict --task sufficiency --request examples/sufficiency.json \
-  --base "$BASE" --checkpoint "$CKPT"
-jev eval --config configs/sufficiency.json --split val --method jev \
-  --base "$BASE" --checkpoint "$CKPT" --output runs/suff-jev-val
-```
-
-`--method` 支持 `jev`、`qwen`、`rule`。Qwen 禁用 adapter，从相同输入的候选字母 logits 取最大值。固定规则始终继续检索或执行追问。评测先写 `predictions.json`，再读取标签并写 `metrics.json`。指标包括准确率、macro-F1、混淆矩阵，以及有概率输出时的充分性 AUROC。
-
-## DRIFT-inspired BM25 RAG
-
-借鉴微软 GraphRAG 的 DRIFT Search 追问流程，在每题自带的候选文档上用 BM25 检索。三组共享草稿和追问逻辑，分别使用无门控、Qwen 门控和 Jev 门控。每次运行生成逐题答案、决策轨迹和成本记录。 [复现流程](docs/ITERATIVE_RAG.md) · [实验结果](results/README.md) · [查询逐步轨迹](docs/GATE_TRACES.md)
-
-## 一键对比与诊断
-
-`jev rag compare` 支持在固定 HotpotQA 或 2WikiMultiHopQA 划分上比较多种门控；`jev rag diagnose` 对照同题轨迹；`jev rag replay` 强制指定 Jev 节点的选项并重跑后续。 [离线示例、实验配置和回放命令](docs/EXPERIMENTS.md)
-
-## 自定义输入
-
-用 `jev convert` 导入决策日志或 RAG 测试集。用 Python 适配器接入自己的生成模型或门控模型。 [自定义输入与适配器示例](docs/CUSTOM_INPUTS.md)
-
-## 训练与结果
-
-- [数据卡](docs/DATASETS.md)记录训练数据的来源、字段、标签及冻结划分。
-- [训练复现](docs/TRAINING.md)说明联合训练网格、[v3 方案](docs/TRAINING.md#v3-分叉结果监督)与任务级训练接口。
-- [模型卡](models/README.md)记录模型配置和权重校验方式。
-- [实验结果](results/README.md)收录对照表、消融与轨迹。
-- [仓库约定](docs/CONVENTIONS.md)记录目录设计、实验记录规范和参考仓库。
-
-复现需要原始 Qwen3.5-4B、Mentat v0.3 权重与对应源码。将训练和评测所需的 JSON 放到对应的 `data/<task>/` 目录。用 `data/*/FILES_SHA256.json` 核对版本。模型卡列出了权重校验值。
+| 我想…… | 去哪里 |
+| --- | --- |
+| 复现对照、查看轨迹、回放错题 | [实验与回放指南](docs/EXPERIMENTS.md) |
+| 了解 BM25 迭代搜索和门控设置 | [RAG 方法](docs/ITERATIVE_RAG.md) |
+| 接入自己的数据或模型、评测单项门控 | [自定义输入与适配器](docs/CUSTOM_INPUTS.md) |
+| 查看数据来源和训练细节 | [数据卡](docs/DATASETS.md) · [训练复现](docs/TRAINING.md) |
+| 下载或核验权重 | [模型卡](models/README.md) |
+| 浏览结果表和已发布轨迹 | [结果索引](results/README.md) |
+| 找到配置、源码和实验产物的位置 | [仓库结构](docs/CONVENTIONS.md#目录结构) |
