@@ -1,20 +1,20 @@
 # DRIFT-inspired BM25 RAG
 
-方法参考微软 GraphRAG 的 DRIFT Search。DRIFT 使用社区报告生成初始答案和追问，再沿知识图谱开展局部搜索。本实验借鉴多轮追问流程，在每道题自带的候选文档内做 BM25 检索，按候选队列顺序处理追问，并比较三种门控策略。 [Microsoft Research 介绍](https://www.microsoft.com/en-us/research/blog/introducing-drift-search-combining-global-and-local-search-methods-to-improve-quality-and-efficiency/) · [GraphRAG 官方文档](https://microsoft.github.io/graphrag/query/drift_search/)
+Microsoft GraphRAG's DRIFT Search uses community reports to generate an initial answer and follow-ups, then searches locally along a knowledge graph. This experiment adopts the iterative follow-up pattern and uses BM25 over each question's candidate documents. It processes follow-ups in queue order and compares three gate policies. [Microsoft Research introduction](https://www.microsoft.com/en-us/research/blog/introducing-drift-search-combining-global-and-local-search-methods-to-improve-quality-and-efficiency/) · [GraphRAG documentation](https://microsoft.github.io/graphrag/query/drift_search/)
 
-每道题先用 BM25 取前两篇文档，由 Qwen 写出初始草稿。每轮先判断草稿是否完整且有已见证据支持。若继续检索，Qwen 提出一到三个候选追问。必要性判断逐条决定是否执行，执行时检索三篇文档并用 Qwen 读出分支答案。已执行分支的文档和答案进入状态，随后 Qwen 重写草稿。停搜时返回当前草稿，最多运行三轮。
+For each question, BM25 retrieves two initial documents and Qwen writes the draft. Each round begins by checking whether the draft is complete and supported by the visible evidence. If retrieval continues, Qwen proposes one to three follow-ups. A necessity decision determines whether each follow-up runs. Execution retrieves three documents and uses Qwen to answer the follow-up. The controller adds those documents and answers to the state, then Qwen rewrites the draft. The controller returns the current draft at stopping time, with a maximum of three rounds.
 
-| 配置 | 充分性 | 必要性 |
+| Configuration | Sufficiency | Necessity |
 |---|---|---|
-| `hotpotqa_pipeline_fixed.json` | 按轮次推进 | 执行全部入队追问 |
-| `hotpotqa_pipeline_qwen.json` | Qwen 选择候选字母 | Qwen 三分类 |
-| `hotpotqa_pipeline_jev.json` | Jev 读出，95% 门槛 | Jev 二分类，95% 门槛 |
+| `hotpotqa_pipeline_fixed.json` | Continue by round | Execute all queued follow-ups |
+| `hotpotqa_pipeline_qwen.json` | Qwen selects a candidate letter | Qwen uses three options |
+| `hotpotqa_pipeline_jev.json` | Jev readout, 95% threshold | Jev uses two options, 95% threshold |
 
-Jev 使用经两个任务联合训练的 `batch=16, lr=2e-5` adapter/readout。两项温度由原验证集 NLL 拟合。低置信度时继续检索或执行追问。该门槛结果属于探索性比较。Qwen 与 Jev 的必要性选项数不同，表格比较的是三套完整策略。
+The original Jev adapter and readout were jointly trained on the two tasks with `batch=16, lr=2e-5`. Both temperatures were fitted by validation NLL. Low confidence routes to continued retrieval or follow-up execution. The threshold comparison is exploratory. Qwen and Jev use different numbers of necessity options, so the table compares full policies.
 
-## 复现命令
+## Reproduction commands
 
-安装模型依赖，设置 `MENTAT_SRC`、`BASE` 和 `JOINT_CKPT`。联合权重和基座的文件校验值列在 `data/hotpotqa/split.json`。下载指定版本的 HotpotQA distractor validation Parquet，或提供官方 distractor dev JSON。准备命令逐题校验公开请求和答案索引。 [HotpotQA 数据与论文](https://hotpotqa.github.io/) · [冻结数据版本](https://huggingface.co/datasets/hotpotqa/hotpot_qa/tree/1908d6afbbead072334abe2965f91bd2709910ab)
+Install the model dependencies and set `MENTAT_SRC`, `BASE`, and `JOINT_CKPT`. The HotpotQA split manifest records the joint checkpoint and base checksums. Use the pinned distractor dev Parquet or the official distractor dev JSON. Preparation verifies the requests and answer key by question. [HotpotQA data and paper](https://hotpotqa.github.io/) · [Pinned dataset revision](https://huggingface.co/datasets/hotpotqa/hotpot_qa/tree/1908d6afbbead072334abe2965f91bd2709910ab)
 
 ```bash
 python -m pip install -e '.[hotpotqa]'
@@ -34,16 +34,16 @@ for mode in fixed qwen jev; do
 done
 ```
 
-`trace/` 按题记录门控状态、选项分数、路由动作、检索文档与草稿更新。`predictions.json` 汇总答案、token、调用数和时间。评分单独读取答案文件，计算标准化精确匹配和答案词元 F1。评分实现取自 HotpotQA 的答案评测代码，适用附带的 Apache 2.0 许可。 [上游评测代码](https://github.com/hotpotqa/hotpot/blob/master/hotpot_evaluate_v1.py)
+`trace/` records gate states, option scores, actions, retrieved documents, and draft updates by question. `predictions.json` reports answers, tokens, calls, and time. Scoring reads the answer key separately to compute normalized exact match and answer-token F1. The scoring code comes from HotpotQA under Apache 2.0. [Upstream scoring code](https://github.com/hotpotqa/hotpot/blob/master/hotpot_evaluate_v1.py)
 
-## HotpotQA 400 题参考结果
+## HotpotQA 400 reference results
 
-| 策略 | EM | F1 | Qwen 调用 | Jev 调用 | 输入 token | 输出 token | 端到端秒/题 |
+| Policy | EM | F1 | Qwen calls | Jev calls | Input tokens | Output tokens | End-to-end s/question |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| 无门控 | 52.75% | 66.46% | 3,706 | 0 | 2,400,254 | 104,250 | 14.62 |
-| Qwen 门控 | 37.25% | 47.74% | 2,348 | 0 | 1,065,085 | 23,849 | 3.17 |
+| No gate | 52.75% | 66.46% | 3,706 | 0 | 2,400,254 | 104,250 | 14.62 |
+| Qwen gate | 37.25% | 47.74% | 2,348 | 0 | 1,065,085 | 23,849 | 3.17 |
 | Jev 95% | 52.25% | 65.52% | 2,602 | 1,818 | 2,758,917 | 64,446 | 10.32 |
 
-参考结果合并两批各 200 题的既有预测。耗时来自原实验，受缓存、调度和硬件影响。Qwen 调用包含生成与判断，Jev 调用只包含充分性和必要性判断。两阶段的输入均按实际被各模型读取的 token 计数。逐题预测和轨迹由复现命令生成。 [汇总数据](../results/hotpotqa400.json)
+The reference combines two existing batches of 200 questions. Timings come from the original runs and depend on caching, scheduling, and hardware. Qwen calls include generation and gating. Jev calls include sufficiency and necessity judgments. Input counts reflect the tokens each model actually reads. The reproduction commands generate per-question predictions and traces. [Summary data](../results/hotpotqa400.json)
 
-附录提供同题的不同门槛及精简充分性对照。 [400 题门控消融](HOTPOTQA400_GATE_ABLATION.md) · [理论依据](CONDITIONAL_INTERACTION.md)
+The ablation report compares thresholds and compact sufficiency on the same questions. [Gate ablations](HOTPOTQA400_GATE_ABLATION.md) · [Rationale for gating](CONDITIONAL_INTERACTION.md)

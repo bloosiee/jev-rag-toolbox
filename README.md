@@ -1,15 +1,15 @@
-# Jev-RAG Toolbox 单任务模型
+# Jev-RAG Toolbox single-task models
 
-此分支收录分别训练的充分性和必要性模型。模型包包含 LoRA 适配器与决策读出层。联合门控模型和迭代 RAG 实验见 [主分支](https://github.com/bloosiee/jev-rag-toolbox/tree/main)。
+This branch contains independently trained sufficiency and necessity models. Each bundle includes a LoRA adapter and decision readout. Joint gates and iterative RAG experiments are on the [main branch](https://github.com/bloosiee/jev-rag-toolbox/tree/main).
 
-| 决策 | 输入 | 输出 |
+| Decision | Input | Output |
 | --- | --- | --- |
-| 草稿充分性 | 原问题、已检索文档、当前草稿、追问历史与待处理问题 | `sufficient` / `continue` |
-| 追问必要性 | 原问题、已检索文档、已执行追问、中间答案、待处理问题、候选追问 | `execute` / `skip_covered` / `skip_unhelpful` |
+| Draft sufficiency | Original question, retrieved documents, draft, follow-up history, and pending questions | `sufficient` / `continue` |
+| Follow-up necessity | Original question, retrieved documents, executed follow-ups, draft, pending questions, and candidate follow-up | `execute` / `skip_covered` / `skip_unhelpful` |
 
-在迭代搜索中，`sufficient` 可以触发生成最终答案，`execute` 可以触发一次检索。执行后的证据写回状态，供下一轮判断。Jev 返回选项和概率，检索、生成和停止条件由流程代码控制。
+In iterative retrieval, sufficiency can trigger final answer generation and `execute` can trigger retrieval. Retrieved evidence is added to the next state. Jev returns a choice and probabilities, while the controller handles retrieval, generation, and stopping.
 
-## 快速试跑
+## Quick start
 
 ```bash
 python -m pip install --upgrade 'pip>=23'
@@ -17,7 +17,7 @@ python -m pip install -e .
 jev predict --task necessity --method rule --request examples/necessity.json
 ```
 
-Jev 和 Qwen 对照共用 Mentat 的原生提示格式。设置 `BASE` 为 Qwen3.5-4B 目录，`CKPT` 为对应 adapter/readout 目录，`MENTAT_SRC` 为 Mentat 源码目录。
+Jev and Qwen use the native Mentat prompt format. Set `BASE` to the Qwen3.5-4B directory, `CKPT` to the adapter and readout directory, and `MENTAT_SRC` to the Mentat source tree's `src` directory.
 
 ```bash
 python -m pip install -r requirements-model.txt
@@ -26,11 +26,11 @@ jev predict --task trajectory_sufficiency --request examples/trajectory_sufficie
   --base "$BASE" --checkpoint "$CKPT"
 ```
 
-`--method` 支持 `jev`、`qwen`、`rule`。Qwen 禁用 adapter，从相同输入的候选字母 logits 取最大值。固定规则始终继续检索或执行追问。评测先写 `predictions.json`，再读取标签并写 `metrics.json`。指标包括准确率、macro-F1、混淆矩阵，以及有概率输出时的充分性 AUROC。
+The available methods are `jev`, `qwen`, and `rule`. Qwen disables the adapter and selects the highest-scoring option letter for the same prompt. The rule always continues retrieval or executes the follow-up. Evaluation writes `predictions.json` before reading labels and writing `metrics.json`. Metrics include accuracy, macro-F1, the confusion matrix, and sufficiency AUROC when probabilities are available.
 
-## 权重、数据与训练
+## Weights, data, and training
 
-- [模型卡和权重下载](models/README.md)
-- [数据卡](docs/DATASETS.md)
-- [单任务训练接口](docs/TRAINING.md#任务级训练接口)
-- [自定义输入与适配器](docs/CUSTOM_INPUTS.md)
+- [Model cards and downloads](models/README.md)
+- [Data card](docs/DATASETS.md)
+- [Single-task training interface](docs/TRAINING.md#single-task-training-interface)
+- [Custom inputs and adapters](docs/CUSTOM_INPUTS.md)
