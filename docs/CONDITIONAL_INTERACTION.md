@@ -1,7 +1,7 @@
-# 门控的理论依据
+# Rationale for gating
 
-Wang 等提出将推理分成预测、选择、执行和更新。System 1 在调用前评估候选交互的价值，System 2 执行获准的交互，执行结果用于更新状态及后续的决策模型。论文讨论了门控自身的开销、错过有价值动作的损失，以及被门控跳过的样本缺少结果标签的问题。 [Wang 等，2026，第 6.3 节与第 7.2 节](https://arxiv.org/abs/2610.39497)
+Wang et al. organize inference around prediction, selection, execution, and updating. System 1 estimates candidate interactions' value before invocation. System 2 executes selected interactions, and their outcomes inform the state and later decision models. The paper discusses screening cost, missed useful actions, and missing outcome labels for skipped interactions. [Wang et al., 2026, Sections 6.3 and 7.2](https://arxiv.org/abs/2610.39497)
 
-在 DRIFT-inspired BM25 RAG 中，Jev 的充分性门控决定是否保留当前草稿并结束检索，必要性门控决定是否执行某条候选追问。Qwen 生成追问、读取检索证据并更新草稿。
+In DRIFT-inspired BM25 RAG, the Jev sufficiency gate decides whether to return the current draft and end retrieval. The necessity gate decides whether to execute a specific follow-up. Qwen generates follow-ups, reads retrieved evidence, and updates the draft.
 
-当前实验使用 Jev 给定选项的置信度门槛。概率经过既有温度缩放，精简输入沿用相同温度。门槛是筛选规则，实际收益由同题端到端结果衡量。成本账目包括 Jev 的输入与判断时间，以及 Qwen 的输入、生成与调用时间。
+The experiments gate on Jev's confidence over the available options. Compact inputs use the same temperature scaling. The threshold controls which actions execute, and matched end-to-end results measure the actual benefit. The cost ledger includes Jev input and decision time alongside Qwen input, generation, and call time.

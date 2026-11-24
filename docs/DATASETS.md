@@ -1,23 +1,23 @@
-# 数据卡
+# Data card
 
-| 数据 | Train 题 / 状态 | Validation 题 / 状态 | Test 题 / 状态 |
+| Dataset | Train questions / states | Validation questions / states | Test questions / states |
 | --- | ---: | ---: | ---: |
 | SufficiencyBench v1.1 | 1,352 / 2,704 | 264 / 528 | 1,069 / 2,138 |
 | RAG-Necessity-987 | 697 / 1,822 | 140 / 370 | 150 / 396 |
-| 真实轨迹充分性（v2） | 389 / 927 | 77 / 189 | 82 / 196 |
+| Trajectory sufficiency (v2) | 389 / 927 | 77 / 189 | 82 / 196 |
 
 ## SufficiencyBench v1.1
 
-沿用官方划分和充分性标签。一个问题可以对应多份检索上下文，评测按状态计分。目标是判断可见文档能否完整回答问题。上游文本适用各来源数据的条款，详情见 [SufficiencyBench](https://github.com/inab-lab/SufficiencyBench)。
+We use the official split and sufficiency labels. Each question can have multiple retrieved contexts, and evaluation scores each state. The task is to judge whether the visible documents can fully answer the question. The upstream text is subject to its source terms. [SufficiencyBench](https://github.com/inab-lab/SufficiencyBench)
 
 ## RAG-Necessity-987
 
-由 HotpotQA 问题上的检索轨迹构成。GLM 与 DeepSeek 教师对候选追问打标签。三类分别表示值得执行、已有证据覆盖、对原问题无帮助。不确定标注从监督样本剔除。先取最早完成的 987 道题，再按题分组，固定 seed 42。标注可用性可能影响样本构成。评测反映模型对这些教师标签的拟合。
+This dataset uses retrieval trajectories from HotpotQA questions. GLM and DeepSeek teachers label follow-ups as worth executing, already covered by evidence, or unhelpful to the original question. Uncertain labels are excluded. We used the first 987 completed questions and grouped states by question with seed 42. Label availability may affect the sample composition. Evaluation measures agreement with the teacher labels.
 
-## 真实轨迹充分性（v2）
+## Trajectory sufficiency (v2)
 
-样本来自 HotpotQA 训练划分的无门控迭代 RAG 轨迹。输入包含当前草稿、当时已检到的证据及追问历史。草稿匹配标准答案且当时的正文包含全部标注支持句时，自动标为可提交。明确弃答、反向判断、错误整数，以及逐条复核的错答或漏答标为继续。暂缓使用可能存在别名或替代证据的样本。同题的两个任务和各轮状态继承相同划分。HotpotQA 400 题管线实验与本数据分开。
+Samples come from ungated iterative RAG on the HotpotQA training split. Inputs contain the current draft, retrieved evidence, and follow-up history. A draft is labeled ready to submit when it matches the reference answer and the retrieved text contains all annotated supporting sentences. Explicit abstentions, reversed judgments, incorrect integers, and individually reviewed wrong or missing answers are labeled continue. Cases with possible aliases or alternative evidence are held out of this labeling process. Both tasks and all rounds for a question use the same split. The HotpotQA 400 pipeline benchmark uses separate questions.
 
-## 文件格式
+## File format
 
-`train.json` 每条含 `id`、`task_id`、`state`、固定选项与标签。模型输入由 `state` 和固定判断问题组成。训练标签只进入损失。验证和测试各用 `requests.json` 存输入，`gold.json` 按 ID 存标签。两个任务分别核对题目 ID，三个划分均无交集。源码版本控制默认忽略正文数据；公开发行时需核对来源和再分发条款。
+Each `train.json` row includes `id`, `task_id`, `state`, the fixed options, and a label. Model input comprises the state and fixed judgment question. The label is used in the loss. Validation and test use `requests.json` for inputs and `gold.json` for labels keyed by ID. The three splits are disjoint by question ID within each task. Version control excludes dataset contents by default. Review source and redistribution terms before publishing them.

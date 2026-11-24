@@ -1,21 +1,21 @@
-# HotpotQA 400 题 · v2 联合模型
+# HotpotQA 400 · Joint v2
 
-使用同一批题、候选文档、初始草稿、生成模型和搜索预算。Jev 两道门槛均为 95%，必要性使用二分类。两项温度沿用 v1 的值。本次更换联合门控权重，v1、无门控与 Qwen 门控使用已有同题结果。 [v1 实验设置](../docs/ITERATIVE_RAG.md)
+The runs use the same questions, candidate documents, initial drafts, generator, and search budget. Both Jev thresholds are 95%, with binary necessity decisions. Temperatures are carried over from v1. The v1, no-gate, and Qwen-gate results are reused on the same questions. [v1 settings](../docs/ITERATIVE_RAG.md)
 
-| 策略 | EM | F1 | Qwen 调用 | Jev 调用 | 输入 token | 输出 token | 总 token | 端到端秒/题 | Qwen 秒/题 | Jev 秒/题 |
+| Policy | EM | F1 | Qwen calls | Jev calls | Input tokens | Output tokens | Total tokens | End-to-end s/question | Qwen s/question | Jev s/question |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 无门控 | 52.75% | 66.46% | 3,706 | 0 | 2,400,254 | 104,250 | 2,504,504 | 14.62 | 13.93 | 0.00 |
-| Qwen 门控 | 37.25% | 47.74% | 2,348 | 0 | 1,065,085 | 23,849 | 1,088,934 | 3.17 | 4.01 | 0.00 |
+| No gate | 52.75% | 66.46% | 3,706 | 0 | 2,400,254 | 104,250 | 2,504,504 | 14.62 | 13.93 | 0.00 |
+| Qwen gate | 37.25% | 47.74% | 2,348 | 0 | 1,065,085 | 23,849 | 1,088,934 | 3.17 | 4.01 | 0.00 |
 | Jev v1 | 52.25% | 65.52% | 2,602 | 1,818 | 2,758,917 | 64,446 | 2,823,363 | 10.32 | 9.02 | 1.01 |
 | Jev v2 | 51.75% | 65.33% | 1,578 | 1,152 | 1,571,632 | 36,649 | 1,608,281 | 5.81 | 4.96 | 0.61 |
 
-与 v1 相比，v2 有 6 题由错变对、8 题由对变错。历史端到端数据受缓存和并发调度影响，按原运行口径保留。耗时仅为本实验观测。
+Compared with v1, v2 answers 6 previously incorrect questions correctly and misses 8 previously correct questions. The original runs retain their timing conventions. Cache behavior and scheduling affect end-to-end times.
 
-## 查询轨迹
+## Inspect a trace
 
 ```bash
 jev rag trace --input results/hotpotqa400_v2_traces.jsonl.gz \
   --id 5ab9535a5542996be202047e
 ```
 
-轨迹含门控动作、置信度、检索文档序号、停搜原因及成本。 [汇总数据](hotpotqa400_v2.json) · [轨迹索引](hotpotqa400_v2_traces.jsonl.gz)
+Traces include gate actions, confidence, retrieved document indices, stop reasons, and costs. [Summary data](hotpotqa400_v2.json) · [Trace index](hotpotqa400_v2_traces.jsonl.gz)

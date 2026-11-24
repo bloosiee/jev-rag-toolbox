@@ -68,8 +68,8 @@ def compare(args):
 
 
 def write_table(path, metrics):
-    headings = ("策略", "题数", "EM", "F1", "端到端秒/题", "生成秒/题", "门控秒/题",
-                "生成调用", "门控调用", "输入 token", "输出 token", "总 token")
+    headings = ("Policy", "Questions", "EM", "F1", "End-to-end s/question", "Generation s/question",
+                "Gate s/question", "Generation calls", "Gate calls", "Input tokens", "Output tokens", "Total tokens")
     lines = ["| " + " | ".join(headings) + " |",
              "| " + " | ".join(["---"] + ["---:"]*(len(headings)-1)) + " |"]
     for arm, row in metrics.items():

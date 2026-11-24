@@ -1,15 +1,15 @@
-# 自定义日志、测试集和模型
+# Custom logs, datasets, and models
 
-## 试跑和评测单项门控
+## Try and evaluate a single gate
 
-在仓库根目录安装软件包。规则策略可在没有 GPU 和权重的环境中试跑。
+Install the base package from the repository root. The rule baseline runs without a GPU or weights.
 
 ```bash
 python -m pip install -e .
 jev predict --task necessity --method rule --request examples/necessity.json
 ```
 
-使用原生模型时，将 `BASE` 指向 Qwen3.5-4B，将 `CKPT` 指向包含适配器与读出层的目录，将 `MENTAT_SRC` 指向 Mentat 源码的 `src` 目录。 [权重和模型版本](../models/README.md)
+For native models, set `BASE` to Qwen3.5-4B, `CKPT` to the adapter and readout directory, and `MENTAT_SRC` to the Mentat source tree's `src` directory. [Checkpoint and model versions](../models/README.md)
 
 ```bash
 python -m pip install -r requirements-model.txt
@@ -20,11 +20,11 @@ jev eval --config configs/sufficiency.json --split val --method jev \
   --base "$BASE" --checkpoint "$CKPT" --output runs/suff-jev-val
 ```
 
-单项门控支持 `jev`、`qwen`、`rule`。Qwen 禁用适配器并从相同提示的候选字母 logits 取最大值。规则策略始终继续检索或执行追问。评测先写预测，再读取标签计算准确率、macro-F1、混淆矩阵及有概率输出时的充分性 AUROC。
+Single-gate evaluation supports `jev`, `qwen`, and `rule`. Qwen disables the adapter and selects the highest-scoring option letter for the same prompt. The rule policy always continues retrieval or executes the follow-up. Evaluation saves predictions before reading labels to compute accuracy, macro-F1, the confusion matrix, and sufficiency AUROC when probabilities are available.
 
-## 决策日志
+## Decision logs
 
-支持 JSON 数组、JSONL 和 CSV。用映射文件把标准字段名指向源字段，点号可定位嵌套字段。CSV 的文档、历史追问和问题队列列使用 JSON 字符串。字段名已匹配时省略 `--mapping`。
+Supported inputs are JSON arrays, JSONL, and CSV. A mapping file maps standard fields to source fields, using dot notation for nested values. Use JSON strings for documents, follow-up history, and pending questions in CSV. Omit `--mapping` when the fields already match.
 
 ```bash
 jev convert decisions --task sufficiency --input examples/custom_decisions.jsonl \
@@ -34,28 +34,28 @@ jev eval --task sufficiency --requests runs/custom-decisions/requests.json \
   --gold runs/custom-decisions/gold.json --method rule --output runs/custom-decision-eval
 ```
 
-充分性输入 `original_question` 和 `retrieved_documents`。必要性再提供 `executed_followups`（每条含 `question` 和 `answer`）、`current_intermediate_answer`、`pending_questions` 和 `proposed_followup`。标注列默认叫 `label`，取值沿用两项任务的固定选项。没有标注时省略 `--labeled` 和 `--gold`，批量命令仍写预测。
+Sufficiency takes `original_question` and `retrieved_documents`. Necessity also takes `executed_followups` with a `question` and `answer` for each entry, `current_intermediate_answer`, `pending_questions`, and `proposed_followup`. The default label column is `label` and uses the task's fixed option values. Omit `--labeled` and `--gold` for unlabeled prediction.
 
-## RAG 测试集
+## RAG datasets
 
-每行放 `id`、`question` 和 `documents`。文档提供 `title`，以及 `text` 或 `sentences`。带答案的记录加 `answer` 和 `--labeled`。
+Provide `id`, `question`, and `documents` in each row. Each document needs a `title` and either `text` or `sentences`. For a labeled dataset, include `answer` and pass `--labeled`.
 
 ```bash
 jev convert rag --input examples/custom_rag.jsonl --labeled --output runs/custom-rag
 ```
 
-把生成的 `tasks.json` 交给 `jev rag run --tasks`，省略 HotpotQA 冻结清单。用单独生成的 `gold.json` 调用 `jev rag score`。自定义集沿用 HotpotQA 答案 EM/F1 口径。转换输出带 SHA-256 清单。
+Pass the generated `tasks.json` to `jev rag run --tasks` without the HotpotQA manifest. Use the separate `gold.json` with `jev rag score`. Custom datasets use the HotpotQA answer EM/F1 scorer. Conversion writes a SHA-256 manifest.
 
-## 模型适配器
+## Model adapters
 
-把本地 Python 模块加入 `PYTHONPATH`，按 `module:factory` 指定工厂。工厂接受一个配置字典，默认是空字典，也可通过 `--adapter-config` 提供 JSON 文件。仅加载信任的 Python 模块。认证信息从环境变量读取。
+Add your local Python module to `PYTHONPATH` and identify the factory as `module:factory`. The factory takes a configuration dictionary, empty by default or loaded from `--adapter-config`. Load trusted Python modules and read credentials from environment variables.
 
-| 方法 | 输入 | 返回 |
+| Method | Input | Return value |
 |---|---|---|
-| `predict(kind, request)` | `request` 包含状态、判断问题和选项 | `choice`，可附 `probabilities` 和 token 数 |
-| `generate(prompt, *, max_new_tokens, schema=None)` | 提示、生成预算和可选 JSON Schema | `text`，可附 `truncated` 和 token 数 |
+| `predict(kind, request)` | State, decision question, and options in `request` | `choice`, with optional `probabilities` and token counts |
+| `generate(prompt, *, max_new_tokens, schema=None)` | Prompt, generation budget, and optional JSON Schema | `text`, with optional `truncated` and token counts |
 
-决策日志用 `jev predict --adapter` 或 `jev eval --adapter`。RAG 用 `--generator-adapter` 替换生成模型，用 `--gate-adapter` 替换门控。保留原生组件时仍提供基座与检查点。选择 Jev 路由配置时，门控适配器提供给定选项的归一化概率，由配置中的阈值决定动作。外部概率由适配器负责校准。返回 token 数时使用 `input_tokens` 和 `output_tokens`，未提供时汇总记为 `null`。
+Use `--adapter` with `jev predict` or `jev eval` for decision logs. For RAG, use `--generator-adapter` to replace generation and `--gate-adapter` to replace gating. Supply the base and checkpoint whenever a native component remains in use. With the Jev policy, the adapter returns normalized probabilities over the listed options and the configured threshold determines the action. The adapter is responsible for external probability calibration. Supply token counts as `input_tokens` and `output_tokens`. Missing counts are recorded as `null`.
 
 ```bash
 PYTHONPATH=examples/adapters jev rag run --config configs/hotpotqa_pipeline_jev.json \
@@ -66,13 +66,13 @@ jev rag score --predictions runs/custom-rag-run/predictions.json \
   --gold runs/custom-rag/gold.json --output runs/custom-rag-run/metrics.json
 ```
 
-示例适配器用固定回答演示接口。接真实模型时把两项方法换成模型调用即可。
+The example adapter uses fixed responses to demonstrate the interface. Replace these methods with your model calls to use a real backend.
 
-## 用自己的模型跑 RAG 并查询轨迹
+## Run RAG with your model and inspect traces
 
-`chat_endpoint.py` 可以调用实现 Chat Completions 接口的本地模型服务或 API。把 `examples/adapters/chat_endpoint.json` 中的 `generator_model` 改成服务提供的模型名。可选的 `gate_model` 用来单独指定门控模型。把 API 密钥设在 `JEV_CHAT_API_KEY` 环境变量里，服务无需认证时可以省略。
+`chat_endpoint.py` calls a local model server or API with a Chat Completions interface. Set `generator_model` in `examples/adapters/chat_endpoint.json` to a model served by the endpoint. Optionally set `gate_model` to select a separate gate. If authentication is required, set `JEV_CHAT_API_KEY` in the environment.
 
-下面可直接使用示例测试集验证接入。替换 `--input` 即可载入自己的 JSON、JSONL 或 CSV。自行指定列名时加上 `--mapping`。
+Use the example dataset to verify the connection. Change `--input` to load your own JSON, JSONL, or CSV. Add `--mapping` for custom column names.
 
 ```bash
 export JEV_CHAT_BASE_URL=http://127.0.0.1:8000/v1
@@ -92,4 +92,4 @@ jev rag trace --input runs/my-rag-traces --id question-1
 jev rag trace --input runs/my-rag-traces --id question-1 --step 1
 ```
 
-这里用 `qwen` 配置中的直接选择策略，生成和判断都由适配器中指定的模型执行。端点返回选项即可。需要置信度门槛时，切换到 `jev` 策略并提供能返回选项概率的门控适配器。调用外部 API 时，检索状态和文档会发送到指定端点。轨迹保存在本地运行目录。 [轨迹字段与步骤说明](EXPERIMENTS.md#查看逐步轨迹)
+This example uses the `qwen` policy's direct option selection. The adapter provides both generation and gating, and the endpoint can return a choice alone. For confidence thresholds, switch to the `jev` policy with a gate adapter that returns option probabilities. An external API receives the current retrieval state and documents. The run directory stores traces locally. [Trace fields and steps](EXPERIMENTS.md#inspect-step-by-step-traces)

@@ -1,14 +1,14 @@
-# 2WikiMultiHopQA 400 题 · v2 联合模型
+# 2WikiMultiHopQA 400 · Joint v2
 
-四组基于同一批题、候选文档和初始草稿。Jev v2 采用全输入 95/95，沿用 v1 的温度和搜索预算。三组历史对照保留原计时口径。
+All four policies use the same questions, candidate documents, and initial drafts. Jev v2 uses full-input 95/95 and the v1 temperatures and search budget. The three historical references retain their original timing conventions.
 
-| 方法 | EM | F1 | Qwen 调用 | Jev 调用 | 输入 token | 输出 token | 总 token | 端到端秒／题 | Qwen 秒／题 | Jev 秒／题 |
+| Policy | EM | F1 | Qwen calls | Jev calls | Input tokens | Output tokens | Total tokens | End-to-end s/question | Qwen s/question | Jev s/question |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 无门控 | 208/400（52.00%） | 58.33% | 3,760 | 0 | 2,580,569 | 99,698 | 2,680,267 | 14.18 | 13.51 | 0.00 |
-| Qwen 门控 | 149/400（37.25%） | 42.08% | 4,377 | 0 | 1,897,151 | 55,478 | 1,952,629 | 8.96 | 8.69 | 0.00 |
-| Jev v1 95/95 | 208/400（52.00%） | 58.57% | 2,907 | 1,990 | 3,353,040 | 68,967 | 3,422,007 | 11.26 | 9.75 | 1.20 |
-| Jev v2 95/95 | 209/400（52.25%） | 59.22% | 2,157 | 1,509 | 2,479,487 | 51,113 | 2,530,600 | 8.39 | 7.15 | 0.91 |
+| No gate | 208/400 (52.00%) | 58.33% | 3,760 | 0 | 2,580,569 | 99,698 | 2,680,267 | 14.18 | 13.51 | 0.00 |
+| Qwen gate | 149/400 (37.25%) | 42.08% | 4,377 | 0 | 1,897,151 | 55,478 | 1,952,629 | 8.96 | 8.69 | 0.00 |
+| Jev v1 95/95 | 208/400 (52.00%) | 58.57% | 2,907 | 1,990 | 3,353,040 | 68,967 | 3,422,007 | 11.26 | 9.75 | 1.20 |
+| Jev v2 95/95 | 209/400 (52.25%) | 59.22% | 2,157 | 1,509 | 2,479,487 | 51,113 | 2,530,600 | 8.39 | 7.15 | 0.91 |
 
-与 v1 相比，v2 有 15 题由错变对、14 题由对变错。v2 有 1 题触发生成上限，按错题计入 400 题分母。
+Compared with v1, v2 answers 15 previously incorrect questions correctly and misses 14 previously correct questions. One v2 output hit the generation cap and counts as incorrect in the 400-question denominator.
 
-[汇总数据](2wikimultihopqa400_v2.json) · [逐步轨迹](2wikimultihopqa400_v2_traces.jsonl.gz)
+[Summary data](2wikimultihopqa400_v2.json) · [Step-by-step traces](2wikimultihopqa400_v2_traces.jsonl.gz)

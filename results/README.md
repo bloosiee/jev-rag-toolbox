@@ -1,28 +1,28 @@
-# 实验结果
+# Experiment results
 
-按**答案生成模型**分组。`Jev v1` 和 `Jev v2` 是门控权重版本，表中无门控和 Qwen 门控是同数据对照。
+Results are grouped by the **answer generator**. Jev v1 and v2 identify gate checkpoints. Each comparison uses its own no-gate and Qwen-gate baselines on the same data.
 
-## Qwen3.5-4B 生成器
+## Qwen3.5-4B generator
 
 ### HotpotQA 400
 
-| 实验 | 结果 | 轨迹 |
+| Experiment | Results | Traces |
 | --- | --- | --- |
-| v1 主实验 | [报告](HOTPOTQA400_V1.md) · [JSON](hotpotqa400.json) | |
-| v1 门控消融 | [报告](HOTPOTQA400_GATE_ABLATION.md) · [JSON](hotpotqa400_gate_ablation.json) | [轨迹索引](hotpotqa400_gate_traces.jsonl.gz) |
-| v2 主实验 | [报告](HOTPOTQA400_V2.md) · [JSON](hotpotqa400_v2.json) | [轨迹索引](hotpotqa400_v2_traces.jsonl.gz) |
-| v2 门控消融 | [报告](HOTPOTQA400_V2_ABLATION.md) · [JSON](hotpotqa400_v2_ablation.json) | [轨迹索引](hotpotqa400_v2_ablation_traces.jsonl.gz) |
+| v1 main experiment | [Report](HOTPOTQA400_V1.md) · [JSON](hotpotqa400.json) | |
+| v1 gate ablations | [Report](HOTPOTQA400_GATE_ABLATION.md) · [JSON](hotpotqa400_gate_ablation.json) | [Trace index](hotpotqa400_gate_traces.jsonl.gz) |
+| v2 main experiment | [Report](HOTPOTQA400_V2.md) · [JSON](hotpotqa400_v2.json) | [Trace index](hotpotqa400_v2_traces.jsonl.gz) |
+| v2 gate ablations | [Report](HOTPOTQA400_V2_ABLATION.md) · [JSON](hotpotqa400_v2_ablation.json) | [Trace index](hotpotqa400_v2_ablation_traces.jsonl.gz) |
 
 ### 2WikiMultiHopQA 400
 
-[v1 主实验 JSON](2wikimultihopqa400.json) · [v2 主实验报告](2WIKIMULTIHOPQA400_V2.md) · [v2 轨迹](2wikimultihopqa400_v2_traces.jsonl.gz)
+[v1 main experiment JSON](2wikimultihopqa400.json) · [v2 main experiment report](2WIKIMULTIHOPQA400_V2.md) · [v2 traces](2wikimultihopqa400_v2_traces.jsonl.gz)
 
-## Qwen3.5-9B 生成器
+## Qwen3.5-9B generator
 
-[查看 HotpotQA 消融和两套数据的 95/95 对比图](../README.md#qwen35-9b)。
+[HotpotQA ablations and 95/95 figures for both datasets](../README.md#qwen35-9b)
 
-## 重新生成 README 图表
+## Regenerate the README figures
 
-在仓库根目录运行 `python scripts/plot_rag_results.py`，从已核验的 JSON 生成 `results/figures/` 下的 PNG。绘图需要 Matplotlib。开展新一轮实验时，用 `--extra` 传入额外的图表定义，每个定义包含 `title`、`filename` 和 `rows`。每行依次填写显示名称、颜色键（`fixed`、`qwen` 或 Jev 版本）和该组完整的 400 题结果对象。同一图内保留同一题集和生成模型。缺少核验结果的组合标为待完成。
+Run `python scripts/plot_rag_results.py` from the repository root to render PNGs under `results/figures/` from the checked result JSON, using Matplotlib. Use `--extra` to supply additional figure definitions. Each definition contains `title`, `filename`, and `rows`. Each row specifies a display name, a color key (`fixed`, `qwen`, or the Jev version), and the result object for a full 400-question run. Keep the dataset and generator fixed within each figure. Mark unchecked runs as pending.
 
-[查看轨迹与回放命令](../docs/EXPERIMENTS.md#查看逐步轨迹)
+[Trace and replay commands](../docs/EXPERIMENTS.md#inspect-step-by-step-traces)

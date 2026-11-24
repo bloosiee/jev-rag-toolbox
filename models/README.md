@@ -1,34 +1,33 @@
-# 联合模型卡
+# Joint model cards
 
-工具箱代码发布用 `toolbox-vX.Y.Z`。联合权重和今后的权重 Release 用 `jev-joint-vN`。早期发布的下载地址继续可用。
+Toolbox releases use `toolbox-vX.Y.Z`. Joint checkpoints and future checkpoint releases use `jev-joint-vN`. Earlier download URLs remain available.
 
-| 权重标识 | 充分性训练 | 必要性训练 | 状态 |
+| Checkpoint | Sufficiency training | Necessity training | Status |
 | --- | --- | --- | --- |
-| `jev-joint-v1` | SufficiencyBench v1.1，2,704 个状态 | RAG-Necessity-987，1,822 个教师标注状态 | [下载权重](#下载-v1-权重)，batch 16，学习率 2e-5 |
-| `jev-joint-v2` | 真实轨迹的草稿充分性，927 个状态 | 同 v1 | [下载权重](#下载-v2-权重)，batch 16，学习率 2e-5 |
-| `jev-joint-v3` | 以 v2 为对照 | 按 Wang 等的条件交互框架，用执行和跳过的终局结果生成动作标签 | [训练方案](../docs/TRAINING.md#v3-分叉结果监督) · 计划中 |
+| `jev-joint-v1` | SufficiencyBench v1.1, 2,704 states | RAG-Necessity-987, 1,822 teacher-labeled states | [Download weights](#download-v1-weights), batch 16, learning rate 2e-5 |
+| `jev-joint-v2` | Draft sufficiency from recorded trajectories, 927 states | Same as v1 | [Download weights](#download-v2-weights), batch 16, learning rate 2e-5 |
+| `jev-joint-v3` | Uses v2 as the reference | Action labels from final outcomes after executing or skipping, following Wang et al.'s conditional interaction framework | [Training design](../docs/TRAINING.md#v3-supervision-from-paired-rollouts) · Release pending |
 
-`jev-joint-v2` 在固定划分上按充分性验证准确率 60%、必要性验证准确率 40% 选择联合模型。 [实验结果与轨迹](../results/README.md)
+`jev-joint-v2` was selected on a fixed split using validation accuracy weighted 60% for sufficiency and 40% for necessity. [Results and traces](../results/README.md)
 
-## 下载 v1 权重
+## Download v1 weights
 
-`jev-joint-v1` 的权重分卷位于 [GitHub Release `jev-joint-v1`](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/jev-joint-v1)。脚本依次核验分卷和压缩包的 SHA-256。
+The weight parts are available in the [jev-joint-v1 Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/jev-joint-v1). The script verifies the SHA-256 of each part and of the assembled archive.
 
 ```bash
 python scripts/download_weights.py jev-joint-v1
 tar -xzf checkpoints/joint.tar.gz -C checkpoints
 ```
 
-将 `checkpoints/joint` 传给 `--checkpoint`。权重目录包含 LoRA、决策读出层及配置，详见[文件校验清单](joint.sha256.json)。基座从上游获取。 [Qwen3.5-4B 固定版本](https://huggingface.co/Qwen/Qwen3.5-4B/tree/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a) · [Mentat v0.3 初始化模型](https://huggingface.co/yunqu/mentat-sys1-v0.3)
+Pass `checkpoints/joint` to `--checkpoint`. The directory contains LoRA weights, a decision readout, and configuration. Obtain the base model from upstream. [Checkpoint checksums](joint.sha256.json) · [Pinned Qwen3.5-4B revision](https://huggingface.co/Qwen/Qwen3.5-4B/tree/851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a) · [Mentat v0.3 initialization](https://huggingface.co/yunqu/mentat-sys1-v0.3)
 
+## Download v2 weights
 
-## 下载 v2 权重
-
-`jev-joint-v2` 的权重分卷位于 [GitHub Release `joint-model-v2`](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/joint-model-v2)。脚本依次核验分卷和压缩包的 SHA-256。
+The weight parts for `jev-joint-v2` are available in the [joint-model-v2 Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/joint-model-v2).
 
 ```bash
 python scripts/download_weights.py jev-joint-v2
 tar -xzf checkpoints/joint-v2.tar.gz -C checkpoints
 ```
 
-将 `checkpoints/joint-v2` 传给 `--checkpoint`。 [文件校验清单](joint-v2.sha256.json)
+Pass `checkpoints/joint-v2` to `--checkpoint`. [Checkpoint checksums](joint-v2.sha256.json)

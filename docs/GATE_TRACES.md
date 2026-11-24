@@ -1,7 +1,7 @@
-# 查看门控轨迹
+# Inspect gate traces
 
-[查看逐步轨迹](EXPERIMENTS.md#查看逐步轨迹)
+[Inspect step-by-step traces](EXPERIMENTS.md#inspect-step-by-step-traces)
 
-## 复现 400 题门控策略
+## Reproduce gate settings on 400 questions
 
-[复现 HotpotQA 门控消融](EXPERIMENTS.md#复现-hotpotqa-门控消融)
+[Reproduce the HotpotQA gate ablations](EXPERIMENTS.md#reproduce-the-hotpotqa-gate-ablations)

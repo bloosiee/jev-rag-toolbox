@@ -1,27 +1,27 @@
-# 真实错题诊断与回放 · Celtic
+# Real error diagnosis and replay with Celtic
 
-HotpotQA 题号 `5abe48675542991f66106119`。题目问 Charlie Nicholas 在 1982 年苏格兰联赛杯决赛为哪支球队效力。标准答案是 **Celtic**。
+HotpotQA question `5abe48675542991f66106119` asks which club Charlie Nicholas played for in the 1982 Scottish League Cup final. The reference answer is **Celtic**.
 
-## 诊断
+## Diagnosis
 
-v1 与 v2 的初始草稿均为 `Charlie Nicholas`，最初检索到的文档相同。v1 的第一次充分性置信度为 82.23%，低于 95% 阈值，于是继续。v2 的置信度为 95.30%，直接提交人名。v1 随后执行了区分 Celtic 和 Rangers 的追问，最终答出球队。
+The v1 and v2 pipelines shared the initial draft `Charlie Nicholas` and the same initial documents. The first sufficiency decision had 82.23% confidence with v1, below 95%, so v1 continued. With v2, confidence reached 95.30% and the pipeline submitted the player's name. The v1 pipeline then executed a follow-up distinguishing Celtic from Rangers and returned the club.
 
-查看 v2 的原始决策：
+Inspect the recorded v2 decision.
 
 ```bash
 jev rag trace --input results/hotpotqa400_v2_traces.jsonl.gz \
   --id 5abe48675542991f66106119 --step 1
 ```
 
-## 实际回放
+## Model replay
 
-使用原 Qwen3.5-4B 和 Jev v2 权重，复用这道题的初始草稿和两个已检索文档。在第一个充分性节点分别强制两个选项，之后由同一管线运行。
+The replay used the original Qwen3.5-4B generator and Jev v2, reusing the draft and its two retrieved documents. It forced each option at the first sufficiency node and then ran the same pipeline.
 
-| 强制选项 | 最终答案 | EM | 后续 Qwen 调用 | 后续 Jev 调用 | 后续总 token |
+| Forced option | Final answer | EM | Post-fork Qwen calls | Post-fork Jev calls | Post-fork total tokens |
 | --- | --- | ---: | ---: | ---: | ---: |
 | `sufficient` | Charlie Nicholas | 0 | 0 | 0 | 0 |
 | `continue` | Celtic | 1 | 3 | 2 | 2,405 |
 
-继续分支执行了一次追问，新增一篇文档，重写出 `Celtic`。下一次充分性判定以 99.80% 结束搜索。分叉后额外耗时约 8.52 秒，为单次实测，排除共享前缀和模型加载。
+Continuing executed one follow-up, added one document, and rewrote the answer to `Celtic`. The next sufficiency decision stopped at 99.80% confidence. The replay took about 8.52 additional seconds in this run, excluding the shared prefix and model loading.
 
-上面的成绩来自真实模型回放。仓库中的离线示例使用独立的确定性适配器。对于自己记录的完整轨迹，可用相同命令选取任意 Jev 节点。 [回放命令与输入格式](EXPERIMENTS.md)
+These figures come from a real model replay. The repository's offline demo uses deterministic adapters. With your own full trace, the same command can select any recorded Jev node. [Replay commands and input format](EXPERIMENTS.md)

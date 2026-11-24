@@ -1,13 +1,13 @@
-# HotpotQA 400 题 · v1 联合模型
+# HotpotQA 400 · Joint v1
 
-## HotpotQA 400 题参考结果
+## Reference results
 
-| 策略 | EM | F1 | Qwen 调用 | Jev 调用 | 输入 token | 输出 token | 端到端秒/题 |
+| Policy | EM | F1 | Qwen calls | Jev calls | Input tokens | Output tokens | End-to-end s/question |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| 无门控 | 52.75% | 66.46% | 3,706 | 0 | 2,400,254 | 104,250 | 14.62 |
-| Qwen 门控 | 37.25% | 47.74% | 2,348 | 0 | 1,065,085 | 23,849 | 3.17 |
+| No gate | 52.75% | 66.46% | 3,706 | 0 | 2,400,254 | 104,250 | 14.62 |
+| Qwen gate | 37.25% | 47.74% | 2,348 | 0 | 1,065,085 | 23,849 | 3.17 |
 | Jev 95% | 52.25% | 65.52% | 2,602 | 1,818 | 2,758,917 | 64,446 | 10.32 |
 
-参考结果合并两批各 200 题的既有预测。耗时来自原实验，受缓存、调度和硬件影响。Qwen 调用包含生成与判断，Jev 调用只包含充分性和必要性判断。两阶段的输入均按实际被各模型读取的 token 计数。逐题预测和轨迹由复现命令生成。 [汇总数据](hotpotqa400.json)
+The reference combines two existing batches of 200 questions. Timings come from the original runs and depend on caching, scheduling, and hardware. Qwen calls include generation and gating. Jev calls include sufficiency and necessity judgments. Input counts reflect the tokens each model actually reads. The reproduction commands generate per-question predictions and traces. [Summary data](hotpotqa400.json)
 
-附录提供同题的不同门槛及精简充分性对照。 [400 题门控消融](HOTPOTQA400_GATE_ABLATION.md) · [理论依据](../docs/CONDITIONAL_INTERACTION.md)
+The ablation report compares thresholds and compact sufficiency on the same questions. [Gate ablations](HOTPOTQA400_GATE_ABLATION.md) · [Rationale for gating](../docs/CONDITIONAL_INTERACTION.md)

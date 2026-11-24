@@ -1,3 +1,3 @@
-# HotpotQA 400 题 v1 门控消融
+# HotpotQA 400 gate ablations (v1)
 
-[查看实验结果](../results/HOTPOTQA400_GATE_ABLATION.md)
+[View experiment results](../results/HOTPOTQA400_GATE_ABLATION.md)
