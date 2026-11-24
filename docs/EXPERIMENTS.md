@@ -12,6 +12,8 @@ jev rag diagnose --input results/hotpotqa400_gate_traces.jsonl.gz \
   --id 5ab9535a5542996be202047e --arms 80_80,95_80
 ```
 
+[Jev v3 results and trace examples](../results/JEV_V3.md)
+
 Historical tables retain the original cost accounting and model settings. [Historical experiment settings](ITERATIVE_RAG.md)
 
 ## Offline three-hop demo

@@ -1,0 +1,582 @@
+[
+  {
+    "title": "HotpotQA \u00b7 Qwen3.5-4B \u00b7 95/95",
+    "filename": "hotpotqa-qwen4b-9595.png",
+    "rows": [
+      [
+        "No gate",
+        "fixed",
+        {
+          "EM_correct": 211,
+          "F1_sum": 265.8460519872285,
+          "input_tokens": 2400254,
+          "output_tokens": 104250,
+          "LLM_calls": 3706,
+          "questions": 400,
+          "LLM_seconds": 5571.523940476123,
+          "e2e_n": 400,
+          "e2e_seconds": 5847.342673063278
+        }
+      ],
+      [
+        "Qwen gate",
+        "qwen",
+        {
+          "EM_correct": 149,
+          "F1_sum": 190.9636121188753,
+          "input_tokens": 1065085,
+          "output_tokens": 23849,
+          "LLM_calls": 2348,
+          "questions": 400,
+          "LLM_seconds": 1602.805575495353,
+          "e2e_n": 400,
+          "e2e_seconds": 1269.149274110794
+        }
+      ],
+      [
+        "Jev v1 95/95",
+        "v1",
+        {
+          "EM_correct": 209,
+          "F1_sum": 262.06322370440023,
+          "input_tokens": 2758917,
+          "output_tokens": 64446,
+          "LLM_calls": 2602,
+          "Jev_calls": 1818,
+          "questions": 400,
+          "LLM_seconds": 3608.5066680398304,
+          "Jev_seconds": 404.73691933369264,
+          "e2e_seconds": 4128.506002187729,
+          "e2e_n": 400
+        }
+      ],
+      [
+        "Jev v2 95/95",
+        "v2",
+        {
+          "correct": 207,
+          "n": 400,
+          "F1": 0.653340654228812,
+          "valid": 400,
+          "stop_reasons": {
+            "sufficient": 297,
+            "no_pending_questions": 47,
+            "round_budget": 56
+          },
+          "qwen_calls": 1578,
+          "jev_calls": 1152,
+          "input_tokens": 1571632,
+          "output_tokens": 36649,
+          "qwen_seconds": 1983.5891414999496,
+          "jev_seconds": 243.48213790985756,
+          "end_to_end_seconds": 2322.2668921351433
+        }
+      ],
+      [
+        "Jev v3 95/95",
+        "v3",
+        {
+          "n": 400,
+          "valid": 400,
+          "input_tokens": 2367141,
+          "output_tokens": 58956,
+          "qwen_calls": 2257,
+          "jev_calls": 1471,
+          "qwen_seconds": 3140.1983616950456,
+          "jev_seconds": 341.30176403326914,
+          "end_to_end_seconds": 3610.522801625775,
+          "correct": 215,
+          "F1": 0.6783294156823573
+        }
+      ]
+    ]
+  },
+  {
+    "title": "HotpotQA \u00b7 Qwen3.5-4B \u00b7 Jev v3 ablation",
+    "filename": "hotpotqa-qwen4b-v3-ablation.png",
+    "rows": [
+      [
+        "No gate",
+        "fixed",
+        {
+          "EM_correct": 211,
+          "F1_sum": 265.8460519872285,
+          "input_tokens": 2400254,
+          "output_tokens": 104250,
+          "LLM_calls": 3706,
+          "questions": 400,
+          "LLM_seconds": 5571.523940476123,
+          "e2e_n": 400,
+          "e2e_seconds": 5847.342673063278
+        }
+      ],
+      [
+        "Qwen gate",
+        "qwen",
+        {
+          "EM_correct": 149,
+          "F1_sum": 190.9636121188753,
+          "input_tokens": 1065085,
+          "output_tokens": 23849,
+          "LLM_calls": 2348,
+          "questions": 400,
+          "LLM_seconds": 1602.805575495353,
+          "e2e_n": 400,
+          "e2e_seconds": 1269.149274110794
+        }
+      ],
+      [
+        "95/95 full",
+        "v3",
+        {
+          "n": 400,
+          "valid": 400,
+          "input_tokens": 2367141,
+          "output_tokens": 58956,
+          "qwen_calls": 2257,
+          "jev_calls": 1471,
+          "qwen_seconds": 3140.1983616950456,
+          "jev_seconds": 341.30176403326914,
+          "end_to_end_seconds": 3610.522801625775,
+          "correct": 215,
+          "F1": 0.6783294156823573
+        }
+      ],
+      [
+        "95/80 full",
+        "v3",
+        {
+          "n": 400,
+          "valid": 400,
+          "input_tokens": 2323812,
+          "output_tokens": 57425,
+          "qwen_calls": 2223,
+          "jev_calls": 1471,
+          "qwen_seconds": 3083.1979760786053,
+          "jev_seconds": 338.2304740110412,
+          "end_to_end_seconds": 3548.9957632038277,
+          "correct": 215,
+          "F1": 0.674130281483223
+        }
+      ],
+      [
+        "80/80 full",
+        "v3",
+        {
+          "n": 400,
+          "valid": 400,
+          "input_tokens": 1508237,
+          "output_tokens": 35290,
+          "qwen_calls": 1485,
+          "jev_calls": 1050,
+          "qwen_seconds": 1879.364640062442,
+          "jev_seconds": 230.64338147942908,
+          "end_to_end_seconds": 2192.35000735661,
+          "correct": 214,
+          "F1": 0.6715315972726965
+        }
+      ],
+      [
+        "80/80 compact",
+        "v3",
+        {
+          "n": 400,
+          "valid": 400,
+          "input_tokens": 2468050,
+          "output_tokens": 71744,
+          "qwen_calls": 2706,
+          "jev_calls": 1792,
+          "qwen_seconds": 3879.3453661673702,
+          "jev_seconds": 308.5143095618114,
+          "end_to_end_seconds": 4346.829910253873,
+          "correct": 212,
+          "F1": 0.6637136148165561
+        }
+      ]
+    ]
+  },
+  {
+    "title": "2WikiMultiHopQA \u00b7 Qwen3.5-4B \u00b7 95/95",
+    "filename": "2wiki-qwen4b-9595.png",
+    "rows": [
+      [
+        "No gate",
+        "fixed",
+        {
+          "EM_correct": 208,
+          "F1_sum": 233.33214285714286,
+          "input_tokens": 2580569,
+          "output_tokens": 99698,
+          "LLM_calls": 3760,
+          "questions": 400,
+          "LLM_seconds": 5404.04910138133,
+          "e2e_seconds": 5672.752187013626,
+          "e2e_n": 400
+        }
+      ],
+      [
+        "Qwen gate",
+        "qwen",
+        {
+          "EM_correct": 149,
+          "F1_sum": 168.31031746031744,
+          "input_tokens": 1897151,
+          "output_tokens": 55478,
+          "LLM_calls": 4377,
+          "questions": 400,
+          "LLM_seconds": 3476.516743184766,
+          "e2e_seconds": 3583.001857995987,
+          "e2e_n": 400
+        }
+      ],
+      [
+        "Jev v1 95/95",
+        "v1",
+        {
+          "EM_correct": 208,
+          "F1_sum": 234.28769841269843,
+          "input_tokens": 3353040,
+          "output_tokens": 68967,
+          "LLM_calls": 2907,
+          "Jev_calls": 1990,
+          "questions": 400,
+          "LLM_seconds": 3900.6563657862134,
+          "Jev_seconds": 479.5646439597476,
+          "e2e_seconds": 4504.963041543961,
+          "e2e_n": 400
+        }
+      ],
+      [
+        "Jev v2 95/95",
+        "v2",
+        {
+          "questions": 400,
+          "EM_correct": 209,
+          "F1_sum": 236.87341269841272,
+          "input_tokens": 2479487,
+          "output_tokens": 51113,
+          "LLM_calls": 2157,
+          "Jev_calls": 1509,
+          "LLM_seconds": 2858.4584298357368,
+          "Jev_seconds": 365.8668428128585,
+          "e2e_n": 400,
+          "e2e_seconds": 3355.2335273940116,
+          "valid": 399,
+          "stop_reasons": {
+            "no_pending_questions": 64,
+            "sufficient": 250,
+            "round_budget": 85,
+            "output_cap": 1
+          }
+        }
+      ],
+      [
+        "Jev v3 95/95",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 3470554,
+          "output_tokens": 77598,
+          "qwen_calls": 3010,
+          "jev_calls": 1895,
+          "qwen_seconds": 4191.959710476687,
+          "jev_seconds": 482.97298653796315,
+          "end_to_end_seconds": 4852.457080694847,
+          "correct": 206,
+          "F1": 0.5786636904761905
+        }
+      ]
+    ]
+  },
+  {
+    "title": "HotpotQA \u00b7 Qwen3.5-9B \u00b7 95/95",
+    "filename": "hotpotqa-qwen9b-9595.png",
+    "rows": [
+      [
+        "No gate",
+        "fixed",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2709521,
+          "output_tokens": 135555,
+          "qwen_calls": 3941,
+          "jev_calls": 0,
+          "qwen_seconds": 9045.849202905782,
+          "jev_seconds": 0,
+          "end_to_end_seconds": 9340.730640064925,
+          "correct": 230,
+          "F1": 0.7135894126298544
+        }
+      ],
+      [
+        "Qwen gate",
+        "qwen",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 877701,
+          "output_tokens": 24350,
+          "qwen_calls": 1702,
+          "jev_calls": 0,
+          "qwen_seconds": 1997.9254001243971,
+          "jev_seconds": 0,
+          "end_to_end_seconds": 2094.6383779235184,
+          "correct": 185,
+          "F1": 0.5704917721167722
+        }
+      ],
+      [
+        "Jev v1 95/95",
+        "v1",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 3125566,
+          "output_tokens": 87522,
+          "qwen_calls": 2707,
+          "jev_calls": 1916,
+          "qwen_seconds": 6257.308471252676,
+          "jev_seconds": 493.6491133850068,
+          "end_to_end_seconds": 7095.7077484205365,
+          "correct": 221,
+          "F1": 0.6966926749720873
+        }
+      ],
+      [
+        "Jev v2 95/95",
+        "v2",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 1772373,
+          "output_tokens": 51784,
+          "qwen_calls": 1641,
+          "jev_calls": 1230,
+          "qwen_seconds": 3596.5515839289874,
+          "jev_seconds": 295.62226058077067,
+          "end_to_end_seconds": 4092.185378518421,
+          "correct": 218,
+          "F1": 0.6864182202601324
+        }
+      ],
+      [
+        "Jev v3 95/95",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2869926,
+          "output_tokens": 85028,
+          "qwen_calls": 2459,
+          "jev_calls": 1614,
+          "qwen_seconds": 5474.824385270476,
+          "jev_seconds": 432.208598067984,
+          "end_to_end_seconds": 6297.125552500598,
+          "correct": 229,
+          "F1": 0.7139307934712352
+        }
+      ]
+    ]
+  },
+  {
+    "title": "HotpotQA \u00b7 Qwen3.5-9B \u00b7 Jev v3 ablation",
+    "filename": "hotpotqa-qwen9b-v3-ablation.png",
+    "rows": [
+      [
+        "No gate",
+        "fixed",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2709521,
+          "output_tokens": 135555,
+          "qwen_calls": 3941,
+          "jev_calls": 0,
+          "qwen_seconds": 9045.849202905782,
+          "jev_seconds": 0,
+          "end_to_end_seconds": 9340.730640064925,
+          "correct": 230,
+          "F1": 0.7135894126298544
+        }
+      ],
+      [
+        "Qwen gate",
+        "qwen",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 877701,
+          "output_tokens": 24350,
+          "qwen_calls": 1702,
+          "jev_calls": 0,
+          "qwen_seconds": 1997.9254001243971,
+          "jev_seconds": 0,
+          "end_to_end_seconds": 2094.6383779235184,
+          "correct": 185,
+          "F1": 0.5704917721167722
+        }
+      ],
+      [
+        "95/95 full",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2869926,
+          "output_tokens": 85028,
+          "qwen_calls": 2459,
+          "jev_calls": 1614,
+          "qwen_seconds": 5474.824385270476,
+          "jev_seconds": 432.208598067984,
+          "end_to_end_seconds": 6297.125552500598,
+          "correct": 229,
+          "F1": 0.7139307934712352
+        }
+      ],
+      [
+        "95/80 full",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2786357,
+          "output_tokens": 81777,
+          "qwen_calls": 2397,
+          "jev_calls": 1604,
+          "qwen_seconds": 5307.541897814255,
+          "jev_seconds": 424.48621806129813,
+          "end_to_end_seconds": 6077.987956777215,
+          "correct": 229,
+          "F1": 0.7166897220426637
+        }
+      ],
+      [
+        "80/80 full",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 1707395,
+          "output_tokens": 49566,
+          "qwen_calls": 1514,
+          "jev_calls": 1099,
+          "qwen_seconds": 3200.8914965190925,
+          "jev_seconds": 275.5653558806516,
+          "end_to_end_seconds": 3693.0976603929885,
+          "correct": 225,
+          "F1": 0.7071482218761637
+        }
+      ],
+      [
+        "80/80 compact",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2837333,
+          "output_tokens": 94839,
+          "qwen_calls": 2863,
+          "jev_calls": 1931,
+          "qwen_seconds": 6141.196935855318,
+          "jev_seconds": 387.98311133822426,
+          "end_to_end_seconds": 6959.928449776489,
+          "correct": 228,
+          "F1": 0.7160102348631767
+        }
+      ]
+    ]
+  },
+  {
+    "title": "2WikiMultiHopQA \u00b7 Qwen3.5-9B \u00b7 95/95",
+    "filename": "2wiki-qwen9b-9595.png",
+    "rows": [
+      [
+        "No gate",
+        "fixed",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2887094,
+          "output_tokens": 129724,
+          "qwen_calls": 3960,
+          "jev_calls": 0,
+          "qwen_seconds": 8739.535915362183,
+          "jev_seconds": 0,
+          "end_to_end_seconds": 9037.738369037863,
+          "correct": 235,
+          "F1": 0.650875258799172
+        }
+      ],
+      [
+        "Qwen gate",
+        "qwen",
+        {
+          "n": 400,
+          "valid": 400,
+          "input_tokens": 507149,
+          "output_tokens": 14306,
+          "qwen_calls": 1405,
+          "jev_calls": 0,
+          "qwen_seconds": 1178.8932759538293,
+          "jev_seconds": 0,
+          "end_to_end_seconds": 1251.217881287448,
+          "correct": 121,
+          "F1": 0.3396517857142857
+        }
+      ],
+      [
+        "Jev v1 95/95",
+        "v1",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 3768498,
+          "output_tokens": 93507,
+          "qwen_calls": 3011,
+          "jev_calls": 2116,
+          "qwen_seconds": 6711.409882374108,
+          "jev_seconds": 576.0974378678948,
+          "end_to_end_seconds": 7674.535446945578,
+          "correct": 224,
+          "F1": 0.6261193064182196
+        }
+      ],
+      [
+        "Jev v2 95/95",
+        "v2",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 2551989,
+          "output_tokens": 64717,
+          "qwen_calls": 2087,
+          "jev_calls": 1514,
+          "qwen_seconds": 4517.946356112603,
+          "jev_seconds": 403.41854127449915,
+          "end_to_end_seconds": 5185.181392668746,
+          "correct": 226,
+          "F1": 0.6279109730848863
+        }
+      ],
+      [
+        "Jev v3 95/95",
+        "v3",
+        {
+          "n": 400,
+          "valid": 399,
+          "input_tokens": 3999698,
+          "output_tokens": 104857,
+          "qwen_calls": 3205,
+          "jev_calls": 2022,
+          "qwen_seconds": 6701.591126316227,
+          "jev_seconds": 577.7483901572414,
+          "end_to_end_seconds": 7688.799109306652,
+          "correct": 229,
+          "F1": 0.6405121635610768
+        }
+      ]
+    ]
+  }
+]

@@ -95,20 +95,12 @@ def current_figures(directory):
     v1 = read(RESULTS / "hotpotqa400_gate_ablation.json")["summary"]
     v2 = read(RESULTS / "hotpotqa400_v2_ablation.json")["summary"]
     v2_main = read(RESULTS / "hotpotqa400_v2.json")["summary"]["95_95"]
-    wiki = read(RESULTS / "2wikimultihopqa400_v2.json")["metrics"]
     for version, main, ablations in (("v1", hot["jev95"], v1), ("v2", v2_main, v2)):
         rows = baseline(hot) + [(POLICIES["95_95"], version, main)]
         rows += [(POLICIES[key], version, ablations[key])
                  for key in ("95_80", "80_80", "compact_80_80")]
         draw(f"HotpotQA · Qwen3.5-4B · Jev {version} ablation",
              f"hotpotqa-qwen4b-{version}-ablation.png", rows, directory)
-    for dataset, slug, metrics, first, second in (
-        ("HotpotQA", "hotpotqa", hot, hot["jev95"], v2_main),
-        ("2WikiMultiHopQA", "2wiki", wiki, wiki["jev95"], wiki["jev_v2_95"]),
-    ):
-        rows = baseline(metrics) + [("Jev v1 95/95", "v1", first), ("Jev v2 95/95", "v2", second)]
-        draw(f"{dataset} · Qwen3.5-4B · 95/95",
-             f"{slug}-qwen4b-9595.png", rows, directory)
 
 
 def main():
@@ -118,7 +110,7 @@ def main():
                         help="Additional verified figure specs (title, filename, rows)")
     args = parser.parse_args()
     current_figures(args.output)
-    for path in args.extra:
+    for path in [RESULTS / "jev_v3_figure_data.json", *args.extra]:
         for fig in read(path):
             filename = fig["filename"]
             if Path(filename).name != filename or not filename.endswith(".png"):

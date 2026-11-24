@@ -6,9 +6,9 @@ Toolbox releases use `toolbox-vX.Y.Z`. Joint checkpoints and future checkpoint r
 | --- | --- | --- | --- |
 | `jev-joint-v1` | SufficiencyBench v1.1, 2,704 states | RAG-Necessity-987, 1,822 teacher-labeled states | [Download weights](#download-v1-weights), batch 16, learning rate 2e-5 |
 | `jev-joint-v2` | Draft sufficiency from recorded trajectories, 927 states | Same as v1 | [Download weights](#download-v2-weights), batch 16, learning rate 2e-5 |
-| `jev-joint-v3` | Outcome labels from stopping or continuing retrieval | Outcome labels from executing or skipping a follow-up | [Training method](../docs/TRAINING.md#v3-supervision-from-paired-rollouts), batch 64, learning rate 2e-5 · Weights pending |
+| `jev-joint-v3` | Outcome labels from stopping or continuing retrieval | Outcome labels from executing or skipping a follow-up | [Download weights](#download-v3-weights), batch 64, learning rate 2e-5 |
 
-`jev-joint-v2` was selected on a fixed split using validation accuracy weighted 60% for sufficiency and 40% for necessity. [Results and traces](../results/README.md)
+`jev-joint-v2` and `jev-joint-v3` were selected on a fixed split using validation accuracy weighted 60% for sufficiency and 40% for necessity. [Results and traces](../results/README.md)
 
 ## Download v1 weights
 
@@ -31,3 +31,15 @@ tar -xzf checkpoints/joint-v2.tar.gz -C checkpoints
 ```
 
 Pass `checkpoints/joint-v2` to `--checkpoint`. [Checkpoint checksums](joint-v2.sha256.json)
+
+
+## Download v3 weights
+
+The weight parts for `jev-joint-v3` are available in the [jev-joint-v3 Release](https://github.com/bloosiee/jev-rag-toolbox/releases/tag/jev-joint-v3).
+
+```bash
+python scripts/download_weights.py jev-joint-v3
+tar -xzf checkpoints/joint-v3.tar.gz -C checkpoints
+```
+
+Pass `checkpoints/joint-v3` to `--checkpoint`. This checkpoint uses the same pinned Qwen3.5-4B base with either answer generator. [Checkpoint checksums](joint-v3.sha256.json) · [Training method](../docs/TRAINING.md#v3-supervision-from-paired-rollouts) · [Results and traces](../results/JEV_V3.md)

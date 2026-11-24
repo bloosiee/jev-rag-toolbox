@@ -33,7 +33,7 @@ Toolbox releases use `toolbox-vX.Y.Z`. Joint gate checkpoints use `jev-joint-vN`
 | --- | --- | --- |
 | `jev-joint-v1` | Joint training on the original sufficiency data and teacher-labeled necessity data | [Download weights](models/README.md#download-v1-weights) |
 | `jev-joint-v2` | Joint training on draft sufficiency from recorded RAG trajectories and the original necessity data | [Download weights](models/README.md#download-v2-weights) |
-| `jev-joint-v3` | Gate supervision from paired rollouts at the same state, following Wang et al.'s conditional interaction framework | [Training method](docs/TRAINING.md#v3-supervision-from-paired-rollouts) · Weights pending |
+| `jev-joint-v3` | Gate supervision from paired rollouts at the same state, following Wang et al.'s conditional interaction framework | [Download weights](models/README.md#download-v3-weights) |
 
 | Decision | Input | Output |
 | --- | --- | --- |
@@ -48,7 +48,7 @@ Figures are grouped by the **Qwen generator**. Jev v1, v2, and v3 identify the *
 
 ### Qwen3.5-4B
 
-**HotpotQA 400 ablations.** Each figure includes the no-gate and Qwen-gate baselines plus full-input 95/95, 95/80, and 80/80 and compact-sufficiency 80/80 for one Jev version. [Reproduce the baseline comparison](docs/EXPERIMENTS.md#reproduce-the-hotpotqa-400-comparison) · [v1 data](results/HOTPOTQA400_GATE_ABLATION.md) · [v2 data](results/HOTPOTQA400_V2_ABLATION.md)
+**HotpotQA 400 ablations.** Each figure includes the no-gate and Qwen-gate baselines plus full-input 95/95, 95/80, and 80/80 and compact-sufficiency 80/80 for one Jev version. [Reproduce the baseline comparison](docs/EXPERIMENTS.md#reproduce-the-hotpotqa-400-comparison) · [v1 data](results/HOTPOTQA400_GATE_ABLATION.md) · [v2 data](results/HOTPOTQA400_V2_ABLATION.md) · [v3 data](results/JEV_V3.md)
 
 ![HotpotQA 400 ablations and baselines with Qwen 4B and Jev v1](results/figures/hotpotqa-qwen4b-v1-ablation.png)
 
@@ -56,7 +56,7 @@ Figures are grouped by the **Qwen generator**. Jev v1, v2, and v3 identify the *
 
 ![HotpotQA 400 ablations and baselines with Qwen 4B and Jev v3](results/figures/hotpotqa-qwen4b-v3-ablation.png)
 
-**95/95 comparison on matched questions.** HotpotQA and 2Wiki use their respective baselines. The figures compare Jev v1, v2, and v3 at fixed thresholds. [HotpotQA data](results/HOTPOTQA400_V2.md) · [2Wiki data](results/2WIKIMULTIHOPQA400_V2.md)
+**95/95 comparison on matched questions.** HotpotQA and 2Wiki use their respective baselines. The figures compare Jev v1, v2, and v3 at fixed thresholds. [HotpotQA data](results/HOTPOTQA400_V2.md) · [2Wiki v2 data](results/2WIKIMULTIHOPQA400_V2.md) · [v3 data for both datasets](results/JEV_V3.md)
 
 ![HotpotQA 400 baselines and Jev v1, v2, and v3 at 95/95 with Qwen 4B](results/figures/hotpotqa-qwen4b-9595.png)
 
@@ -64,7 +64,7 @@ Figures are grouped by the **Qwen generator**. Jev v1, v2, and v3 identify the *
 
 ### Qwen3.5-9B
 
-**HotpotQA 400 ablations.** Jev v1, v2, and v3 are each compared with the no-gate and Qwen-gate 9B baselines on the same questions.
+**HotpotQA 400 ablations.** Jev v1, v2, and v3 are each compared with the no-gate and Qwen-gate 9B baselines on the same questions. [v3 results and traces](results/JEV_V3.md)
 
 ![HotpotQA 400 ablations and baselines with Qwen 9B and Jev v1](results/figures/hotpotqa-qwen9b-v1-ablation.png)
 
