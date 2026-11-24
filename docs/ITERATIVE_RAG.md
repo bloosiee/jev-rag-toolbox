@@ -14,25 +14,7 @@ Jev 使用经两个任务联合训练的 `batch=16, lr=2e-5` adapter/readout。�
 
 ## 复现命令
 
-安装模型依赖，设置 `MENTAT_SRC`、`BASE` 和 `JOINT_CKPT`。联合权重和基座的文件校验值列在 `data/hotpotqa/split.json`。下载指定版本的 HotpotQA distractor validation Parquet，或提供官方 distractor dev JSON。准备命令逐题校验公开请求和答案索引。 [HotpotQA 数据与论文](https://hotpotqa.github.io/) · [冻结数据版本](https://huggingface.co/datasets/hotpotqa/hotpot_qa/tree/1908d6afbbead072334abe2965f91bd2709910ab)
-
-```bash
-python -m pip install -e '.[hotpotqa]'
-python -m pip install -r requirements-model.txt
-export PYTHONPATH="$MENTAT_SRC${PYTHONPATH:+:$PYTHONPATH}"
-
-jev rag prepare --source validation.parquet \
-  --manifest data/hotpotqa/split.json --output data/hotpotqa
-
-for mode in fixed qwen jev; do
-  config="configs/hotpotqa_pipeline_${mode}.json"
-  jev rag run --config "$config" --tasks data/hotpotqa/tasks.json \
-    --manifest data/hotpotqa/split.json --base "$BASE" --checkpoint "$JOINT_CKPT" \
-    --output "runs/hotpotqa-$mode"
-  jev rag score --predictions "runs/hotpotqa-$mode/predictions.json" \
-    --gold data/hotpotqa/gold.json --output "runs/hotpotqa-$mode/metrics.json"
-done
-```
+[复现 HotpotQA 400 题三组对照](EXPERIMENTS.md#复现-hotpotqa-400-题三组对照) 汇总了数据、权重、对照和回放命令。
 
 `trace/` 按题记录门控状态、选项分数、路由动作、检索文档与草稿更新。`predictions.json` 汇总答案、token、调用数和时间。评分单独读取答案文件，计算标准化精确匹配和答案词元 F1。评分实现取自 HotpotQA 的答案评测代码，适用附带的 Apache 2.0 许可。 [上游评测代码](https://github.com/hotpotqa/hotpot/blob/master/hotpot_evaluate_v1.py)
 

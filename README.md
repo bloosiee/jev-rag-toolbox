@@ -2,30 +2,28 @@
 
 训练和评测迭代 RAG 的 Jev 门控。联合模型使用同一套适配器和读出层，支持充分性与必要性判断。
 
-## 快速体验：改一个停搜决定
+## 快速体验：回放一道三跳题
 
-HotpotQA 有一道题问 Charlie Nicholas 在苏格兰联赛杯决赛为哪支球队效力。v2 的草稿答了球员名，Jev 以 **95.30%** 的置信度判定充分并停搜，标准答案是 **Celtic**。在真实回放中，只把这个节点改成「继续」，最终就答出了 Celtic，额外用了 3 次 Qwen 调用和 2 次 Jev 判断。 [真实诊断与回放结果](docs/CELTIC_REPLAY.md)
-
-下面的第一条命令查看公开的真实决策记录，第二条用虚构的同类题跑两种选择。
-
-在仓库根目录运行。安装只需要基础 Python 包，不需要 GPU、模型权重或 API 密钥。
+《The Glass Meridian》的作者第一次记录彗星的天文台，位于哪个国家？这道虚构题需要沿着**书 → 作者 → 天文台 → 国家**找证据。另有一个关于出版年份的干扰追问。
 
 ```bash
 python -m pip install -e .
-jev rag trace --input results/hotpotqa400_v2_traces.jsonl.gz \
-  --id 5abe48675542991f66106119 --step 1
 python examples/replay_demo.py
 ```
 
-演示复用同一个初稿，分别强制第一个充分性节点选 `sufficient` 和 `continue`。
+演示使用确定性适配器，无需 GPU、权重或 API 密钥。一次运行会生成三种策略的对比表、诊断记录和两份分叉回放。
 
-| 演示中的选择 | 最终答案 | EM | 分叉后的生成调用 |
-| --- | --- | ---: | ---: |
-| 直接提交 | Alex Rivera | 0 | 0 |
-| 继续并重写 | North Town FC | 1 | 3 |
+| 演示策略 | 最终答案 | EM | 生成调用 | 门控调用 |
+| --- | --- | ---: | ---: | ---: |
+| 无门控 | Chile | 1 | 11 | 0 |
+| Qwen 门控（模拟） | Chile | 1 | 11 | 7 |
+| Jev 门控（模拟） | Aster Ridge Observatory | 0 | 7 | 6 |
 
-演示使用确定性适配器，输出用于说明回放流程。真实 HotpotQA 记录来自已完成的实验。 [真实结果](results/HOTPOTQA400_V2.md) · [接入自己的模型与测试集](docs/EXPERIMENTS.md)
+- **定位分歧。** Jev 跳过了出版年份追问，却在找到天文台名字后停搜，漏掉了最后一步。
+- **回放充分性。** 在同一节点强制继续，多用 3 次生成和 1 次判断，答案从天文台名字变为 Chile。
+- **回放必要性。** 在同一节点改为执行出版年份追问，多用 1 次生成，最后仍答错。
 
+[演示产物与回放命令](docs/EXPERIMENTS.md#离线三跳示例) · [复现 HotpotQA 三组对照](docs/EXPERIMENTS.md#复现-hotpotqa-400-题三组对照)
 
 ## 模型权重
 
@@ -50,7 +48,7 @@ python examples/replay_demo.py
 
 ### Qwen3.5-4B
 
-**HotpotQA 400 题消融。** 每张图包含无门控和 Qwen 门控两条基线，以及对应 Jev 版本的全输入 95/95、全输入 95/80、全输入 80/80、精简充分性 80/80。 [v1 数据](results/HOTPOTQA400_GATE_ABLATION.md) · [v2 数据](results/HOTPOTQA400_V2_ABLATION.md)
+**HotpotQA 400 题消融。** [复现三组对照](docs/EXPERIMENTS.md#复现-hotpotqa-400-题三组对照)。每张图包含无门控和 Qwen 门控两条基线，以及对应 Jev 版本的全输入 95/95、全输入 95/80、全输入 80/80、精简充分性 80/80。 [v1 数据](results/HOTPOTQA400_GATE_ABLATION.md) · [v2 数据](results/HOTPOTQA400_V2_ABLATION.md)
 
 ![HotpotQA 400：Qwen 4B 与 Jev v1 各消融设置和基线的八项指标](results/figures/hotpotqa-qwen4b-v1-ablation.png)
 

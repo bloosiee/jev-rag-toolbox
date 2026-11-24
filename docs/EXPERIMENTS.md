@@ -14,6 +14,75 @@ jev rag diagnose --input results/hotpotqa400_gate_traces.jsonl.gz \
 
 历史表保留原实验的成本口径和模型配置。轨迹索引含门控概率、执行动作和文档序号，完整问题状态、草稿、答案和实时分叉需要自行运行保存。 [历史实验设置](ITERATIVE_RAG.md)
 
+## 离线三跳示例
+
+在仓库根目录安装基础包并运行。三种策略使用同一生成适配器和同一初稿。门控也由确定性适配器模拟，输出用于验证对比和回放流程。
+
+```bash
+python -m pip install -e .
+python examples/replay_demo.py --output runs/glass-meridian-demo
+```
+
+运行会列出三组的答案、EM、生成和门控调用次数。输出目录里，`comparison/comparison.md` 是完整对比表，`diagnosis.json` 标出第一处追问动作分歧，`replay-stop/replay.json` 和 `replay-skip/replay.json` 分别记录充分性和必要性分叉。每份回放同时保留原选项和改选项的结果，以及分叉后的新增成本。
+
+```bash
+jev rag trace --input runs/glass-meridian-demo/comparison/jev \
+  --id demo-glass-meridian --step 12
+```
+
+示例生成和门控实现见 [适配器代码](../examples/adapters/replay_demo_adapter.py)。可以把自己的生成器或门控接到同一比较流程。 [自定义输入与适配器](CUSTOM_INPUTS.md)
+
+## 复现 HotpotQA 400 题三组对照
+
+下面把数据准备、同题比较和错题回放连起来。配置为无门控、Qwen 门控和联合 Jev v1 95/95，模型和数据版本按冻结清单校验。运行环境需要 CUDA。在仓库根目录执行。
+
+### 准备数据和模型
+
+- 下载固定版本的 HotpotQA distractor validation Parquet，路径设为 `HOTPOT_DEV`。 [固定数据版本](https://huggingface.co/datasets/hotpotqa/hotpot_qa/tree/1908d6afbbead072334abe2965f91bd2709910ab/distractor)
+- 将 `BASE` 设为固定的 Qwen3.5-4B 基座目录，将 `MENTAT_SRC` 设为 Mentat 源码的 `src` 目录。 [模型卡和基座版本](../models/README.md#下载-v1-权重)
+- 下载并解包联合 v1 权重后，`CKPT` 指向包含适配器和读出层的目录。
+
+```bash
+python -m pip install -e '.[hotpotqa]'
+python -m pip install -r requirements-model.txt
+export PYTHONPATH="$MENTAT_SRC${PYTHONPATH:+:$PYTHONPATH}"
+
+python scripts/download_weights.py jev-joint-v1
+tar -xzf checkpoints/joint.tar.gz -C checkpoints
+CKPT="$PWD/checkpoints/joint"
+
+INPUT=runs/hotpotqa400-input
+jev rag prepare --source "$HOTPOT_DEV" \
+  --manifest data/hotpotqa/split.json --output "$INPUT"
+```
+
+### 运行三个策略
+
+```bash
+RUN=runs/hotpotqa400-comparison
+jev rag compare --config configs/hotpotqa_compare.json \
+  --tasks "$INPUT/tasks.json" --gold "$INPUT/gold.json" \
+  --manifest data/hotpotqa/split.json \
+  --base "$BASE" --checkpoint "$CKPT" --output "$RUN"
+```
+
+查看 `$RUN/comparison.md` 和 `$RUN/comparison.json`。三组共享初稿，各自计入初稿生成成本。对照表记录 EM、F1、token、调用次数和耗时。 [历史实验口径和结果](ITERATIVE_RAG.md)
+
+### 查看分歧并回放
+
+从 `$RUN/fixed/predictions.json` 和 `$RUN/jev/predictions.json` 选同一道题，把它的 ID 设为 `QUESTION_ID`。在 `trace` 的输出中找到想改的 Jev 门控事件，把它的 `step` 值设为 `NODE`。
+
+```bash
+jev rag diagnose --input "$RUN/fixed" "$RUN/jev" \
+  --id "$QUESTION_ID" --arms fixed,jev
+jev rag trace --input "$RUN/jev" --id "$QUESTION_ID"
+jev rag replay --run "$RUN/jev" --tasks "$INPUT/tasks.json" \
+  --question-id "$QUESTION_ID" --node "$NODE" --options all \
+  --gold "$INPUT/gold.json" --output "$RUN/replay-$QUESTION_ID"
+```
+
+查看回放目录的 `replay.json`，比较每个动作的最终答案、EM/F1 和分叉后的新增成本。
+
 ## 一次运行多个策略
 
 先运行 `jev rag prepare` 生成独立的 `tasks.json` 和 `gold.json`。HotpotQA 的固定输入可用 [HotpotQA 示例](ITERATIVE_RAG.md)准备。2Wiki 使用 `data/2wikimultihopqa/split.json` 和对应的 [固定版本 dev Parquet](https://huggingface.co/datasets/ohjoonhee/2WikiMultihopQA/blob/7395fc70e1b8e70b2cee4376e39500f9c20555d2/data/validation-00000-of-00001.parquet)。安装 `pyarrow` 后可直接读取 Parquet。自定义数据可通过[转换器](CUSTOM_INPUTS.md)给出相同格式。
