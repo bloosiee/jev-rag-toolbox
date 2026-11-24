@@ -16,9 +16,22 @@ v1 and v2 each compare nine combinations of learning rates 5e-6, 1e-5, and 2e-5 
 
 The v3 design draws on Wang et al.'s (2026) conditional interaction framework, especially selective tool use in Section 6.3 and selective supervision in Section 7.2. Jev screens follow-ups before execution, RAG executes the actions, and offline replay supplies answer quality and call costs for supervision. Forking also executes actions skipped by the original gate so their outcomes can be observed. [Paper](https://arxiv.org/abs/2610.39497) · [Rationale for gating](CONDITIONAL_INTERACTION.md)
 
-Both execution and skipping are tested from the same question, evidence, draft, candidate follow-up, and remaining budget. Both branches use the same downstream rules. Final EM/F1 and call costs are recorded offline. The initial design takes pairs with one correct branch and one incorrect branch and uses the successful action as the binary LoRA target. Pairs where both branches are correct or both are wrong remain in the outcomes and are omitted from these labels. Each labeled pair produces one training sample whose input includes only the pre-fork state. All states and replays for one question share a split.
+### Labeling actions by downstream outcomes
 
-This design applies the paper's framework to the repository's iterative RAG pipeline. v3 release is pending.
+Both branches start at the same RAG state. Sufficiency compares continued retrieval with submitting the current draft. Necessity compares executing and skipping the follow-up. The downstream policy and budget stay fixed. The recorded outcomes include final EM/F1, Qwen calls, input and output tokens, and Qwen and Jev time.
+
+The earlier gates already reduced Qwen calls, so v3 prioritizes final answer quality and uses cost to break ties between successful actions. The main pipeline experiment keeps the v1 and v2 sufficiency and necessity thresholds at 95/95.
+
+| Observed branch outcomes | v3 training target |
+| --- | --- |
+| One branch is correct | Select the correct action |
+| Both are correct with different Qwen call counts | Select the action with fewer calls |
+| Both are correct with the same Qwen call count | Keep the outcome pair without a hard label |
+| Both are incorrect | Keep the outcome pair without a hard label |
+
+The audit records EM/F1 and costs for each pair. The model sees the pre-fork state in the decision prompt. The selected action serves as the training target. Post-fork answers, scores, costs, and reference answers are used for offline verification. All states from a question share a split. Labels reflect outcomes under the recorded generator, policy, and budget. Pairs with two wrong answers are counted separately.
+
+HotpotQA's official training split supplies 1,000 valid sufficiency pairs and 1,000 valid necessity pairs. The resulting 1,225 labels are stratified by gate and action with seed 42 into 985 train, 120 validation, and 120 test examples. Joint training uses the same nine training configurations. The fork validation score weights sufficiency and necessity 60% and 40%. The selected configuration uses effective batch 64 and learning rate 2e-5. The end-to-end benchmarks reuse the original question sets, generator-specific initial drafts, and search budgets.
 
 ## Single-task training interface
 

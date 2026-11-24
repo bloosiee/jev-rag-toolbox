@@ -6,7 +6,7 @@ Toolbox releases use `toolbox-vX.Y.Z`. Joint checkpoints and future checkpoint r
 | --- | --- | --- | --- |
 | `jev-joint-v1` | SufficiencyBench v1.1, 2,704 states | RAG-Necessity-987, 1,822 teacher-labeled states | [Download weights](#download-v1-weights), batch 16, learning rate 2e-5 |
 | `jev-joint-v2` | Draft sufficiency from recorded trajectories, 927 states | Same as v1 | [Download weights](#download-v2-weights), batch 16, learning rate 2e-5 |
-| `jev-joint-v3` | Uses v2 as the reference | Action labels from final outcomes after executing or skipping, following Wang et al.'s conditional interaction framework | [Training design](../docs/TRAINING.md#v3-supervision-from-paired-rollouts) · Release pending |
+| `jev-joint-v3` | Outcome labels from stopping or continuing retrieval | Outcome labels from executing or skipping a follow-up | [Training method](../docs/TRAINING.md#v3-supervision-from-paired-rollouts), batch 64, learning rate 2e-5 · Weights pending |
 
 `jev-joint-v2` was selected on a fixed split using validation accuracy weighted 60% for sufficiency and 40% for necessity. [Results and traces](../results/README.md)
 
