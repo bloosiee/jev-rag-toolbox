@@ -1,4 +1,4 @@
-# Jev-RAG Toolbox
+# <img src="docs/assets/jev-rag-title.svg" alt="Jev-RAG Toolbox" width="470">
 
 Train and evaluate Jev gates for iterative retrieval-augmented generation. The joint models use one adapter and readout for evidence sufficiency and follow-up necessity.
 
