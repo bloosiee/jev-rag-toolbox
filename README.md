@@ -100,6 +100,10 @@ Figures are grouped by the **Qwen generator**. Jev v1, v2, and v3 identify the *
 | Browse published tables and traces | [Results index](results/README.md) |
 | Find configuration, source, and experiment artifacts | [Repository layout](docs/CONVENTIONS.md#directory-layout) |
 
+## Citation
+
+If you use or build on Jev-RAG Toolbox, please cite it in your research or link back to this repository in your project's README. [Citation metadata](CITATION.cff)
+
 <p align="right">
   <img src="docs/assets/kwai-signature.svg" alt="kwai" width="150">
 </p>

@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use or build on this software, please cite this repository."
+title: "Jev-RAG Toolbox"
+type: software
+authors:
+  - name: kwai
+repository-code: "https://github.com/bloosiee/jev-rag-toolbox"
+url: "https://github.com/bloosiee/jev-rag-toolbox"
