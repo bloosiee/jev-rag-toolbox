@@ -2,6 +2,12 @@
 
 Train and evaluate Jev gates for iterative retrieval-augmented generation. The joint models use one adapter and readout for evidence sufficiency and follow-up necessity.
 
+## Pipelines
+
+| Pipeline | What you can run | Branch |
+| --- | --- | --- |
+| Iterative RAG | BM25 retrieval, draft updates, sufficiency and necessity gates, matched benchmarks, and decision replay | [`iterative-rag`](https://github.com/bloosiee/jev-rag-toolbox/tree/iterative-rag) |
+
 ## Quick start with a three-hop replay
 
 In which country is the observatory where the author of *The Glass Meridian* first catalogued a comet? This fictional example follows the evidence from **book → author → observatory → country**. A follow-up about the publication year adds a distractor.
