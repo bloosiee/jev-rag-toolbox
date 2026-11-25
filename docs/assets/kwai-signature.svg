@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 112" role="img" aria-labelledby="title">
+  <title id="title">kwai</title>
+  <g fill="none" stroke="#517ec6" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="3.5" d="M13 84
+      C26 80 41 62 49 42 C57 23 53 14 46 22
+      C38 30 32 55 24 91 C33 76 44 60 53 63
+      C62 66 47 79 35 78 C44 79 50 92 62 87
+      C71 83 74 74 81 66 C78 75 74 87 79 90
+      C85 94 94 79 100 67 C97 75 94 86 99 87
+      C106 89 114 75 119 65 C118 74 123 79 130 75
+      C136 68 144 63 150 68 C147 64 138 68 132 77
+      C125 87 130 92 136 89 C145 85 150 75 153 67
+      C151 74 146 85 152 86 C158 88 166 79 171 69
+      C168 78 165 85 170 86 C180 88 195 75 209 64"/>
+    <path stroke-width="3.1" d="M175 57l2.4-2.8"/>
+    <path stroke-width="1.8" opacity=".76" d="M61 101c38-7 90-11 127-10"/>
+  </g>
+</svg>

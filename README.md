@@ -99,3 +99,7 @@ Figures are grouped by the **Qwen generator**. Jev v1, v2, and v3 identify the *
 | Download or verify checkpoints | [Model cards](models/README.md) |
 | Browse published tables and traces | [Results index](results/README.md) |
 | Find configuration, source, and experiment artifacts | [Repository layout](docs/CONVENTIONS.md#directory-layout) |
+
+<p align="right">
+  <img src="docs/assets/kwai-signature.svg" alt="kwai" width="150">
+</p>
